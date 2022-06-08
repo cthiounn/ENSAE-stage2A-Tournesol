@@ -1,0 +1,132 @@
+classDiagram
+direction BT
+class core_user {
+   varchar(128) password
+   timestamp with time zone last_login
+   boolean is_superuser
+   varchar(150) username
+   varchar(254) email
+   boolean is_staff
+   boolean is_active
+   timestamp with time zone date_joined
+   boolean is_demo
+   varchar(100) first_name
+   varchar(100) last_name
+   bigint id
+}
+
+class tournesol_comparison {
+   double precision duration_ms
+   timestamp with time zone datetime_lastedit
+   timestamp with time zone datetime_add
+   varchar(50) entity_1_2_ids_sorted
+   bigint user_id
+   bigint entity_1_id
+   bigint entity_2_id
+   bigint poll_id
+   bigint id
+}
+class tournesol_comparisoncriteriascore {
+   text criteria
+   double precision score
+   double precision weight
+   bigint comparison_id
+   bigint id
+}
+class tournesol_contributorrating {
+   boolean is_public
+   bigint user_id
+   bigint entity_id
+   bigint poll_id
+   bigint id
+}
+class tournesol_contributorratingcriteriascore {
+   text criteria
+   double precision score
+   double precision uncertainty
+   bigint contributor_rating_id
+   bigint id
+}
+class tournesol_contributorscaling {
+   text criteria
+   double precision scale
+   double precision scale_uncertainty
+   double precision translation
+   double precision translation_uncertainty
+   bigint poll_id
+   bigint user_id
+   bigint id
+}
+class tournesol_criteria {
+   varchar(50) name
+   bigint id
+}
+class tournesol_criterialocale {
+   varchar(10) language
+   varchar(255) label
+   bigint criteria_id
+   bigint id
+}
+class tournesol_criteriarank {
+   integer rank
+   boolean optional
+   bigint criteria_id
+   bigint poll_id
+   bigint id
+}
+class tournesol_entity {
+   timestamp with time zone metadata_timestamp
+   timestamp with time zone add_time
+   timestamp with time zone last_metadata_request_at
+   integer rating_n_ratings
+   integer rating_n_contributors
+   jsonb metadata
+   varchar(32) type
+   varchar(144) uid
+   double precision tournesol_score
+   bigint id
+}
+class tournesol_entitycriteriascore {
+   text criteria
+   double precision score
+   double precision uncertainty
+   double precision quantile
+   bigint entity_id
+   bigint poll_id
+   double precision deviation
+   varchar(30) score_mode
+   bigint id
+}
+class tournesol_poll {
+   varchar(50) name
+   varchar(32) entity_type
+   varchar(32) algorithm
+   boolean active
+   bigint id
+}
+class tournesol_videoratelater {
+   timestamp with time zone datetime_add
+   bigint user_id
+   bigint video_id
+   bigint id
+}
+
+
+tournesol_comparison  -->  core_user : user_id=id
+tournesol_comparison  -->  tournesol_entity : entity_2_id=id
+tournesol_comparison  -->  tournesol_entity : entity_1_id=id
+tournesol_comparison  -->  tournesol_poll : poll_id=id
+tournesol_comparisoncriteriascore  -->  tournesol_comparison : comparison_id=id
+tournesol_contributorrating  -->  core_user : user_id=id
+tournesol_contributorrating  -->  tournesol_entity : entity_id=id
+tournesol_contributorrating  -->  tournesol_poll : poll_id=id
+tournesol_contributorratingcriteriascore  -->  tournesol_contributorrating : contributor_rating_id=id
+tournesol_contributorscaling  -->  core_user : user_id=id
+tournesol_contributorscaling  -->  tournesol_poll : poll_id=id
+tournesol_criterialocale  -->  tournesol_criteria : criteria_id=id
+tournesol_criteriarank  -->  tournesol_criteria : criteria_id=id
+tournesol_criteriarank  -->  tournesol_poll : poll_id=id
+tournesol_entitycriteriascore  -->  tournesol_entity : entity_id=id
+tournesol_entitycriteriascore  -->  tournesol_poll : poll_id=id
+tournesol_videoratelater  -->  core_user : user_id=id
+tournesol_videoratelater  -->  tournesol_entity : video_id=id
