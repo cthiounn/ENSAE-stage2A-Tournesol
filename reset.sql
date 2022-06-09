@@ -1,0 +1,22 @@
+truncate public.core_user cascade;
+truncate public.tournesol_poll cascade;
+truncate public.tournesol_entity cascade;
+
+INSERT INTO public.tournesol_criteriarank VALUES (1, 100, false, 1, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (2, 90, true, 2, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (3, 80, true, 3, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (4, 70, true, 4, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (5, 60, true, 5, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (6, 50, true, 6, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (7, 40, true, 7, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (8, 30, true, 8, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (9, 20, true, 9, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (10, 10, true, 10, 1);
+INSERT INTO public.tournesol_criteriarank VALUES (11, 80, false, 11, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (12, 70, false, 12, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (13, 60, false, 13, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (14, 50, false, 14, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (15, 40, true, 15, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (16, 30, true, 16, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (17, 20, true, 17, 2);
+INSERT INTO public.tournesol_criteriarank VALUES (18, 10, true, 18, 2);
