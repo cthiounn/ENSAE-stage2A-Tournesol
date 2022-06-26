@@ -1,0 +1,212 @@
+\documentclass{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Packages généraux
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[utf8]{inputenc}
+\usepackage[toc,page]{appendix} % appendices
+\usepackage{hyperref} % liens cliquables
+\usepackage{xcolor} % couleur du texte
+\usepackage{blindtext} % sections non numérotées
+\usepackage[autostyle]{csquotes} % citation en ligne
+\usepackage{footnotehyper}
+\usepackage{comment} % pour masquer des passages
+\usepackage{titling}
+
+\newcommand{\bm}[1]{{\color{blue}\textbf{BM}: #1}}
+\def\siecle#1{\textsc{\romannumeral #1}\textsuperscript{e}~siècle}
+
+% Manager de couleurs pour les liens
+\hypersetup{
+  citebordercolor = {1 1 1} % White box arround citation (that we can not see
+  %colorlinks   = true, %Colours links instead of  boxes
+  %urlcolor     = green, %Colour for external hyperlinks
+  %linkcolor    =green, %Colour of internal links
+  %citecolor   = grey %Colour of citations
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Bibliographie
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[
+    backend=biber,
+    style=apa,
+    natbib
+  ]{biblatex}
+  
+\addbibresource{biblio.bib} % import biblio file
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Glossaire
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[toc]{glossaries}
+
+\makeglossaries
+
+
+\newglossaryentry{dalle}
+{
+  name={DALL$\cdot$E},
+  description={The text-to-image model studied in this report},
+}
+\newacronym{ia}{IA}{Intelligence Artificielle}
+\newacronym{qrmed}{QRMed}{Médiane à régularisation quadratique}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Gestion des marges et mise en page générale
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[margin=1.2in]{geometry} 
+\usepackage{multicol}
+\usepackage[inline]{enumitem} % inline enumerate
+\usepackage{adjustbox}
+\usepackage{dblfnote} % double columns footnotes
+
+% add a 4th level (paragraphs)
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Notations, code, mathématiques
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{listings} % code
+\usepackage{listingsutf8}
+\usepackage{minted} % code coloré
+\usepackage{pythontex}
+\usepackage{amsmath} % symboles math
+\usepackage{amssymb}
+\usepackage{bbm} % dummy sign (fat one)
+\usepackage{mathtools} % for equation alginment with \mathrlap
+\usepackage{cancel} % for cancelation
+\usepackage[scr=boondoxo]{mathalfa} % pour mathscr
+\usepackage{aligned-overset} % for alignment even with overset
+\usepackage{paracol}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Images
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\graphicspath{{img/}}
+
+\title{Optimisation des M-estimateurs robustes de Tournesol par des heuristiques en ligne}
+\author{
+Conrad Thiounn }
+\date{Septembre 2022}
+
+\begin{document}
+
+\begin{titlingpage}
+\maketitle
+\begin{center}
+Mémoire de stage de 2A
+
+ENSAE 2022: Stage d'application
+
+\vspace{5mm}
+
+Projet encadré par Lê-Nguyên Hoang (Association Tournesol)
+\end{center}
+\end{titlingpage}
+
+\pagenumbering{roman}
+
+\renewcommand*\contentsname{Table des matières}
+\tableofcontents
+
+\setlength\parskip{0.2 em} % some space between paragraphs
+
+\pagebreak
+\phantomsection % Mandatory line to avoid issues with the hyperlinks in the table of contents
+\addcontentsline{toc}{section}{Remerciements}
+\section*{Remerciements} 
+
+
+\pagebreak
+
+\printglossary[title=Glossaire et abréviations]
+
+\clearpage
+
+\pagebreak
+\phantomsection
+\addcontentsline{toc}{section}{Notations mathématiques}
+\section*{Notations}
+
+% definition of shortcuts for the notations
+\newcommand{\si}{s_{\mathrm{image}}}
+\newcommand{\li}{l_{\mathrm{image}}}
+
+$$
+\begin{aligned}
+n & \text{: l'individu n} \\
+\end{aligned}
+$$
+
+\pagebreak
+\include{0_abstract}
+\pagenumbering{arabic}
+\include{1_intro}
+\include{2_etat_des_lieux}
+\include{3_tournesol_mehestan}
+\include{4_heuristic_en_ligne}
+\include{5_conclusion}
+
+
+
+
+
+
+
+
+
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\section*{Bibliographie}
+
+
+\printbibliography[
+    heading = subbibintoc,
+    type=techreport,
+    title={Rapports institutionnels}]
+    
+\printbibliography[
+    heading = subbibintoc,
+    type=online,
+    title={Ressources en ligne}]
+    
+\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%% APPENDICES %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\phantomsection
+\addcontentsline{toc}{section}{Annexes}
+\begin{appendix}
+
+\end{appendix}
+
+\end{document}
