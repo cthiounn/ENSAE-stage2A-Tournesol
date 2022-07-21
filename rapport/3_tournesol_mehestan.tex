@@ -1,11 +1,46 @@
 \section{Tournesol et Mehestan : construction d'un algorithme robuste sur des données collaboratives dans un monde éthique}
 
-\subsection{Présentation}
+\subsection{Présentation générale}
 
-La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse suivante \href{https://tournesol.app}{https://tournesol.app}, est une plateforme en ligne, où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Pour cela, l'internaute doit au préalable s'inscrire sur la plaforme puis s'authentifier. Une fois authentifié, en tant que contributeur, il a la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations de la plateforme, après calcul et classement par l'algorithme Mehestan, recommandations générales ou par critère. Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparaison et la recommandation de vidéos hébergées sur Youtube, une source d'informations aussi imparfaite soit-elle, mais peut très bien proposer des comparaisons sur d'autres champs, tel que le choix d'un candidat comme pour l'élection présidentielle 2022, ou pour des revues par les pairs d'articles scientifiques.
-A partir de l'ensemble des comparaisons deux à deux d'entités par des utilisateurs avec des notations différentes, l'algorithme Mehestan a pour d'harmoniser toutes les notations deux à deux et de calculer un score global pour chaque entité de manière robuste. En effet, un contributeur ne devrait pas être un contributeur pivot\footnote{en microéconomie, un agent est dit pivot si sa présence ou son absence caractèrise le résultat de production d'un bien public } d'un score d'une entité, afin d'éviter des stratégies sous-optimales et des attaques mal intentionnées
+La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse suivante \href{https://tournesol.app}{https://tournesol.app}, est une plateforme en ligne, où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Pour cela, l'internaute doit au préalable s'inscrire sur la plaforme puis s'authentifier. Une fois authentifié, en tant que contributeur, il a la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations de la plateforme, après calcul et classement par l'algorithme Mehestan, recommandations générales ou par critère.
 
+Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparaison et la recommandation de vidéos hébergées sur Youtube, une source d'informations aussi imparfaite soit-elle, mais peut très bien proposer des comparaisons sur d'autres champs, tel que le choix d'un candidat comme pour l'élection présidentielle 2022, ou pour des revues par les pairs d'articles scientifiques.
+
+À partir de l'ensemble des comparaisons deux par deux d'entités par des utilisateurs avec des notations différentes, l'algorithme Mehestan a pour objectif d'harmoniser toutes les notations deux à deux et de calculer un score global pour chaque entité de manière robuste. En effet, un contributeur ne devrait pas être un contributeur pivot\footnote{en microéconomie, un agent est dit pivot si sa présence ou son absence caractèrise le résultat de production d'un bien public.} d'un score d'une entité, afin d'éviter des stratégies sous-optimales et des attaques mal intentionnées de manipulation de l'information.
+
+\subsection{Objectif de Tournesol : "A better attention is all we need"}
+
+Les scores calculées permettent dans un premier temps de proposer une page de recommandation générale. L'utilisateur a la possibilité de filtrer par critères ou de donner des poids différents aux critères afin de construire sa propre page de recommandation. Dans un monde où la volumétrie de l'information est difficilement appréhendable pour le cerveau humain, les systèmes de recommandations actuels ne sont pas satisfaisants au regard de l'intérêt commun, car ces systèmes sont conçus pour répondre à l'intérêt privé des entreprises, \textit{i.e.} maximiser la captivité de l'attention des utilisateurs. 
+
+L'objectif premier de Tournesol est donc de proposer des informations recommandées pour le bien commun, que la plateforme met en avant. Loin de vouloir corriger tous les biais, la plateforme Tournesol introduit un biais particulier, le biais du jugement des contributeurs, afin de réinternaliser le coût social et de mieux répondre aux préférences des utilisateurs en termes d'accès à l'information. 
+
+Recommandation globale
+Recommandation personnelle * découvrabilité
+
+Robustesse et Sécurité
+Devenir un standard de facto
+Promouvoir des données collaboratives éthiques en open data et à destination des chercheurs
 
 \subsection{Modélisation statistique}
+
+Dans le cadre d'une modélisation statistique bayésienne, sous hypothèse qu'il existe pour chaque entité un score réel avec une relation d'ordre, soit $\theta_{a}\in\Theta=\mathbf{R}$ le paramètre à estimer représentant le score de l'entité a.
+
+Le contributeur n compare deux entités a et b en notant selon un critère principal et un ou plusieurs critères secondaires optionnelles sur une échelle de $R_{min}=-10$ à $R_{max}=10$
+
+Une comparaison est donc un 4-uplet (n, a, b, liste de couple score-critère (s,c))
+
+Le score est actuellement calculé sur le critère principal,
+
+\subsection{Fonctionnement de l'algorithme Mehestan}
+
+L'algorithme Mehestan fonctionne en trois phases :
+
+\begin{enumerate}
+    \item Construction des scores individuelles
+    \item Construction du réétalonnage et des scores normalisés
+    \item Construction des scores des entités
+\end{enumerate}
+\subsubsection{Construction des scores individuelles}
+
 \pagebreak
 
