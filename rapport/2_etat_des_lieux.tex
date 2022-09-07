@@ -1,4 +1,4 @@
-\section{Etat des lieux de l'\gls{ia} et de l'éthique}
+\section{Etat des lieux de l'éthique de l'\gls{ia}}
 
 Cette section introduit les définitions qui seront utilisées dans ce rapport et qui sont indispensables à la compréhension du sujet. Comme en sociologie, les définitions sont un préalable pour une compréhension commune et éclairée et permettent la délimitation du périmètre des sujets. Au delà de l'aspect mathématique et statistique des algorithmes présentés dans ce rapport, il est tout aussi important de se questionner sur l'éthique des algorithmes et modèles déjà existants. \textit{A priori}, les termes utilisés seront, sauf exception, en français, bien que les équivalents anglophones soient davantage connus et usités. Le glossaire, en début de rapport, liste les équivalences.
 
@@ -8,7 +8,7 @@ Cette section introduit les définitions qui seront utilisées dans ce rapport e
 Aujourd'hui, l'\gls{ia} est un terme célèbre et hautement médiatisé, bien connu des citoyens sans toutefois avoir une idée claire de toutes les réalités que le terme désigne. Pourtant composé de deux termes \textit{a priori} anodins, l'\gls{ia} désigne tour à tour pour l'imaginaire collectif des robots, des machines, une réalité fantasmée ou crainte où ces entités sont soit au service de l'humanité ou soit source d'aliénation de cette dernière, à l'image des différents scénarios de films de science-fiction.
 
 
-Né dans la première moitié du \siecle{20}, avec l'essor de la cybernétique, l'\gls{ia} désigne en premier lieu une discipline scientifique ayant pour finalité de créer des machines capables d'effectuer des tâches complexes, automatisées et guidées par des décisions éclairées en fonction des informations disponibles, à l'image de l'intelligence humaine.
+Née dans la première moitié du \siecle{20}, avec l'essor de la cybernétique, l'\gls{ia} désigne en premier lieu une discipline scientifique ayant pour finalité de créer des machines capables d'effectuer des tâches complexes, automatisées et guidées par des décisions éclairées en fonction des informations disponibles, à l'image de l'intelligence humaine.
 
 Plus récemment, avec les progrès de l'informatique, de la collecte et du stockage des données, et des avancées scientifiques dans le domaine de la statistique, le grand public a uniquement connaissance des intelligences artificielles les plus médiatisées, comme AlphaGo et DeepBlue. Beaucoup d'\gls{ia} sont complètement inconnues, prenant des décisions mondialement importantes, telles qu'Aladdin de Blackrock pour la gestion automatisée d'actifs financiers à grande échelle, ou des décisions à haut risque telles que Kargu-2 l'\gls{ia} des drones autonomes tueurs. Le changement d'échelle entre le premier algorithme informatique et ces dernières \gls{ia} amène naturellement à se poser la question de l'éthique des algorithmes et des \gls{ia}, discutée dans la sous-section suivante \ref{subsection:ethique}.
 
@@ -18,7 +18,7 @@ Enfin, le terme "artificielle" est dérivé du latin \textit{artificialis}. Ce t
 En somme, l'\gls{ia} est l'ensemble des méthodes et des connaissances pour effectuer à l'aide d'entité artificielle des activités humaines simples ou complexes, impliquant une activité cognitive pouvant aller de la perception d'information jusqu'à la prise de décision par un raisonnement éclairé. En ce sens, un algorithme prend en entrée des informations, procède à l'ensemble de ses instructions, souvent transposées d'activités cognitives humaines comme le raisonnement déterministe ou bayésien et rend compte d'un ou plusieurs résultats.
 
 \subsubsection{Une définition opératoire arbitraire}
-Afin de délimiter un premier périmètre, ce présent rapport donnera la définition suivante de l'\gls{ia} et se penchera sur l'entité opérationnelle plutôt que la discipline scientifique \footnote{un ensemble de définitions est disponible en annexe \ref{appendice:definition-ia}} : une \gls{ia} est une entité informatisée ayant des fonctions relevant du traitement de l'infomation servant ou pouvant servir à la prise de décision. Tous les algorithmes informatisés sont inclus dans cette définition, y compris un simple "hello world". Dans ce dernier cas, l'\gls{ia} est rudimentaire car elle retourne presque surement l'information "hello world", ou n'importe quelle même résultat de manière systèmatique, quoi que soit ses entrées. Même si l'information est de nature simple, la présence de ce résultat permet de déduire du bon fonctionnement de l'algorithme et peut être source de décision si par exemple le résultat sert pour s'assurer du bon fonctionnement d'un système ("healthcheck").
+Afin de délimiter un premier périmètre, ce présent rapport donnera la définition suivante de l'\gls{ia} et se penchera sur l'entité opérationnelle plutôt que la discipline scientifique \footnote{un ensemble de définitions est disponible en annexe \ref{appendice:definition-ia}} : une \gls{ia} est une entité informatisée ayant des fonctions relevant du traitement de l'infomation servant ou pouvant servir à la prise de décision. Tous les algorithmes informatisés sont inclus dans cette définition, y compris un simple "hello world". Dans ce dernier cas, l'\gls{ia} est rudimentaire car elle retourne presque surement l'information "hello world", ou n'importe quel même résultat de manière systèmatique, quoi que soit ses entrées. Même si l'information est de nature simple, la présence de ce résultat permet de déduire du bon fonctionnement de l'algorithme et peut être source de décision si par exemple le résultat sert pour s'assurer du bon fonctionnement d'un système ("healthcheck").
 
 D'une part, la classe des algorithmes informatisés comprend l'ensemble des méthodes d'apprentissage statistique (ou \gls{ml} en anglais) dont les méthodes utilisant des réseaux de neurone profond (ou \gls{dl} en anglais). Aujourd'hui, aux yeux du public, ces méthodes, en particulier le \gls{dl}, sont confondues avec l'\gls{ia} car leurs performances époustouflantes sont davantage sujettes à être exposées et promues par les médias et à les étiqueter comme l'\gls{ia} à part entière. D'autre part, les algorithmes d'\gls{ia}, dénommés \gls{gofai}, sont historiquement les premières créées et donc sans approche \gls{ml}, comme DeepBlue qui consistait uniquement à évaluer un grand nombre de position avec une puissance de calcul importante.
 
@@ -39,17 +39,26 @@ D'autres exemples d'IA :
 
 \subsection{L'éthique : des graines à semer}\label{subsection:ethique}
 
-Tout comme l'\gls{ia}, l'éthique est une notion qui recoupe plusieurs réalités. Par exemple, dans le sens commun, l'éthique renvoie souvent à l'éthique professionnel comme le professionnalisme ou la justesse d'un bien comme un café bio-éthique au sens équitable et respectueux de l'environnement.
-L'éthique est d'abord une discipline philosophique de la morale et de la vertu. Le terme "éthique" dérive du latin \textit{ethicus} signifiant la morale, terme dérivé du grec \textit{êthikós} ayant la même signification.
-\cite{ethique-cnil}
+Tout comme l'\gls{ia}, l'éthique est une notion qui recoupe plusieurs réalités. Par exemple, dans le sens commun, l'éthique renvoie souvent à l'éthique professionnel comme le professionnalisme ou la justesse de la production d'un bien comme un café bio-éthique au sens équitable et respectueux de l'environnement.
+L'éthique est d'abord une discipline philosophique de la morale et de la vertu. Le terme "éthique" dérive du latin \textit{ethicus} signifiant la morale, terme dérivé du grec \textit{êthikós} ayant la même signification. Pour comprendre pleinement la notion de l'éthique, il est nécessaire de comprendre la discipline philosophique en premier lieu.
+
 \pagebreak
 
-\subsubsection{Un peu de philosophie}
+\subsubsection{Un peu de philosophie : d'Aristote à Kant}
+
+La philosophie morale commence dès l'Antiquité avec les philosophes grecs, Socrate et ses disciples Platon, puis reprise par la suite par Aristote. La morale pour les philosophes socratiques désigne la conduite à tenir à travers les moeurs, dissertant entre ce qui est bien et ce qui est mal. Dans cette discipline, Aristote a produit quatre traités traitant de l'éthique : Ethique à Nicomaque, Ethique à Eudème, Magna Moralia et Sur les vertus et les vices. Dans le livre V de l'Ethique à Nicomaque sur la justice, Aristote définit l'équité comme une pratique à la discrétion du médiateur, pratique corrigeant les torts dues à une législation rigide et non applicable dans certains cas. En somme, pour Aristote, la morale est avant tout des principes moraux à tenir au travers de sa conduite quotidienne de la vie, être juste et pour être juste, il faut pratiquer la justice au quotidien. Par conséquent, la philosophie morale disserte sur cette dernière, entendue aujourd'hui comme l'éthique, une discussion sur la morale.
 
 
+Ethique kantienne
+
+
+principe/devoir -> calcul -> intention -> action -> résultat/conséquences
 \subsubsection{Définition}
 
-\subsubsection{Pour une IA éthique ?}
+\cite{ethique-cnil}
+\subsubsection{Vers une \gls{ia} plus éthique}
+
+Aujourd'hui, bien que des comités et de réflexions éthiques émergent, la problématique de l'éthique en \gls{ia}, n'est pas suffisamment regardée avec l'importance nécessaire au regard de l'importance des impacts de l'\gls{ia} dans le quotidien des citoyens.
 * maximiser la rétention des utilisateurs => IA exploite les failles psychologique => l'addiction et les vidéos addictives, sujets viraux qui exploite la colère et la haine // système de récompense
 
 * neutralité ?

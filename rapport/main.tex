@@ -1,5 +1,4 @@
-\documentclass{article}
-
+\documentclass[hidelinks, 12pt]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% Packages généraux
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -14,7 +13,7 @@
 \usepackage{comment} % pour masquer des passages
 \usepackage{titling}
 
-\newcommand{\bm}[1]{{\color{blue}\textbf{BM}: #1}}
+%\newcommand{\bm}[1]{{\color{blue}\textbf{BM}: #1}}
 \def\siecle#1{\textsc{\romannumeral #1}\textsuperscript{e}~siècle}
 
 % Manager de couleurs pour les liens
@@ -62,25 +61,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% Gestion des marges et mise en page générale
 %%%%%%%%%%%%%%%%%%%%%%%%%
-
-\usepackage[margin=1.2in]{geometry} 
-\usepackage{multicol}
-\usepackage[inline]{enumitem} % inline enumerate
-\usepackage{adjustbox}
-\usepackage{dblfnote} % double columns footnotes
-
-% add a 4th level (paragraphs)
-\usepackage{titlesec}
-\setcounter{secnumdepth}{4}
-\titleformat{\paragraph}
-{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
-\titlespacing*{\paragraph}
-{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
-
-\newenvironment{Figure}
-  {\par\medskip\noindent\minipage{\linewidth}}
-  {\endminipage\par\medskip}
-
+\usepackage[margin=0.8in]{geometry} % Marges
+\usepackage{setspace} % Espace entre les lignes 
+\onehalfspacing % Interligne 1.5
+% Police utilisée
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% Notations, code, mathématiques
@@ -112,16 +98,15 @@
 \title{Optimisation des M-estimateurs robustes de Tournesol par des heuristiques en ligne}
 \author{
 Conrad Thiounn }
-\date{Septembre 2022}
+\date{Septembre 12022}
 
 \begin{document}
-
 \begin{titlingpage}
 \maketitle
 \begin{center}
 Mémoire de stage de 2A
 
-ENSAE 2022: Stage d'application
+ENSAE 12022: Stage d'application
 
 \vspace{5mm}
 
