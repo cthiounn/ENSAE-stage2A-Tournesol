@@ -14,13 +14,14 @@ Les scores calculées permettent dans un premier temps de proposer une page de r
 
 L'objectif premier de Tournesol est donc de proposer des informations recommandées pour le bien commun, que la plateforme met en avant. Loin de vouloir corriger tous les biais, la plateforme Tournesol introduit un biais particulier, le biais du jugement des contributeurs, afin de réinternaliser le coût social et de mieux répondre aux préférences des utilisateurs en termes d'accès à l'information. En ce sens, l'objectif de Tournesol n'est donc pas de proposer des recommandations de manière "neutre", mais avec une visée éthique.
 
+Les informations recommandées prennent tout d'abord la forme de recommandation globale. Le coeur de l'algorithme Mehestan est en premier lieu de proposer une quantification de la désirabilité globale des entités, par l'aggrégation robuste des préférences individuelles. L'algorithme permet alors d'avoir une relation d'ordre et de proposer cette hiérarchisation à l'ensemble des internautes \footnote{https://tournesol.app/recommendations?date=Month&language=}.
 
-Recommandation globale
-Recommandation personnelle * découvrabilité
+De plus, l'internaute peut personnaliser ses recommandations en choississant des filtres et en sélectionnant des critères. Tournesol propose de constituer un indicateur composite personnalisé afin d'affiner ses recommandations et ainsi de proposer des entités proches de ses préférences individuelles. Ce système de recommandations favorise alors une découvrabilité personnalisée d'entités recommandables.
 
-Robustesse et Sécurité
-Devenir un standard de facto
-Promouvoir des données collaboratives éthiques en open data et à destination des chercheurs
+Compte tenu de l'importance de la qualité de l'information, l'algorithme de Tournesol doit être robuste et sécurisé. En particulier, l'algorithme doit être robuste à la contamination de données, aux attaques coordonnées de manipulation de l'information ou attaques bizantines. De même, la plateforme doit être sécurisé et garantir l'intégrité du processus et des données soumises par les contributeur, ainsi que respecter l'éventuel anonymat choisi des préférences individuelles.
+
+
+Au delà de proposer des recommandations, Tournesol a pour ambition de constituer une base de données éthique et collaborative de grande envergure, afin de devenir un standard de facto et de montrer qu'il est possible d'allier éthique et IA et de guider les entités privés à emboîter le pas. Pour cela, un des objectifs finaux de Tournesol est de promouvoir des données collaboratives éthiques en open data et spécifiquement à destination des chercheurs en science des données.
 
 \subsection{Modélisation statistique}
 
@@ -35,17 +36,28 @@ Le score utilisé pour la recommandation est actuellement calculé sur le critè
 \subsubsection{Problème inverse bayésien}
 Hypothèse : les recommandations formulées par un contributeur sont à un bruit près les véritables préférences du contributeur
 
+
+formule
+
+MAP
+
 \subsection{Fonctionnement de l'algorithme Mehestan}
 
 L'algorithme Mehestan fonctionne en trois phases :
 
 \begin{enumerate}
-    \item Construction des scores individuelles
+    \item Construction des scores individuels
     \item Construction du réétalonnage et des scores normalisés
     \item Construction des scores des entités
 \end{enumerate}
-\subsubsection{Construction des scores individuelles}
+\subsubsection{Construction des scores individuels}
+
+Pour chaque contributeur, à partir de sa matrice de comparaison r_t, le vecteur des scores individuels bruts et des incertitudes est calculé à partir des formules énoncées précédemment
+
 \subsubsection{Construction du réétalonnage et des scores normalisés}
+
+Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle.
+
 \subsubsection{Construction des scores des entités}
 
 \pagebreak

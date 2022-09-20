@@ -1,11 +1,377 @@
 \section{Heuristiques en ligne}
 Afin de permettre un calcul rapide, les heuristiques sont un bon compromis entre rapidité et fiabilité. En effet, une heuristique est une méthode de calcul rapide, sans toutefois être exact ou optimal.
 
+\subsection{Première heuristique}
+
+
+\subsection{Proposition d'estimateurs mesurant la qualité de l'heuristique}
+
+
+\subsubsection{Biais de somme nulle}
+
+Les comparaisons relatives constituent un système à somme nulle, puisque des quantités sont ajoutées et retirées de manière asymétrique. Les scores individuels bruts sont à somme nulle. En cas de somme non nulle, le biais signifie que des scores sont sous-estimés ou sur-estimés sans justification valable. Par conséquent, par exemple, si les scores sont d'une entité sont sous-estimés par plusieurs contributeurs, alors le score global de l'entité peut être lui aussi sous-estimé. Il convient alors de mesurer et de maîtriser cette déformation des poids dans un premier temps d'une manière grossière.
+
+Soit l'indicateur \gls{bsn},
+$BSN=$
+
+\subsubsection{Somme des écarts absolus entre résultats de l'heuristique et de Mehestan}
+
+Comme l'heuristique permet d'avoir des résultats approchés des scores calculés Mehestan, la somme des écarts absolus constitue une mesure de la convergence entre les deux algorithmes. Idéalement, cet indicateur devrait tendre vers zéro si possible. Dans le cas contraire, il est nécessaire de mesurer à quel point les résultats de l'heuristique s'écartent des scores réels et d'affiner l'heuristique pour diminuer l'écart.
+
+Soit l'indicateur \gls{eam}
+$EAM=$
+
+
 \subsection{Calcul théorique de l'heuristique proposée}
+%\subsubsection{Evaluation des bornes sur l'estimateur \gls{BSN}}
 
-\subsection{Evaluation pratique de qualité de l'heuristique}
+1. Ajout d'un premier score 
 
-* Biais de somme nulle
-* Somme des écarts absolus
+Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
+
+$r_{t+1}= \begin{pmatrix}
+0 & n_{1-2} \\
+-n_{1-2} & 0 
+\end{pmatrix}$
+
+$l_{t+1}= \begin{pmatrix}
+0 & l_1 \\
+-l_1 & 0 \\
+\end{pmatrix}
+$
+
+$k_{t+1}= \begin{pmatrix}
+0 & k_1 \\
+k_1 & 0 \\
+\end{pmatrix}
+$
+
+
+$L_{t+1}= \begin{pmatrix}
+l_1 k_1\\
+-l_1 k_1 \\
+\end{pmatrix} \triangleq
+\begin{pmatrix}
+L1\\
+L2
+\end{pmatrix} 
+$
+
+$K_{aa,t+1}= \begin{pmatrix}
+\alpha + k_1\\
+\alpha +  k_1\\
+\end{pmatrix} \triangleq
+\begin{pmatrix}
+K1\\
+K2
+\end{pmatrix} 
+$
+
+avec les scores bruts individuels calculés par l'algorithme Mehestan
+
+$\score_{t+1}= \begin{pmatrix}
+\score_{t+1,1} \\
+\score_{t+1,2} 
+\end{pmatrix}$
+
+avec $\score_{t+1,1}  = -\score_{t+1,2} = l_1 k_1/(\alpha+2 k_2)$
+
+L'heuristique donne pour \tau=0, A^{t+1,0}=\set{E_1,E_2}
+
+$ \scoreh_{t+1,0}= \begin{pmatrix}
+(L_1+\score_{1} k_1) / K_1 \\
+(L_2+\score_{2} k_1) / K_2
+\end{pmatrix}
+
+pour \tau=1, A^{t+1,1}=\set{E_1,E_2}
+
+$ \scoreh_{t+1,1}= \begin{pmatrix}
+(L_1+\scoreh_{t+1,0,1} k_1) / K_1 \\
+(L_2+\scoreh_{t+1,0,2} k_1) / K_2
+\end{pmatrix}
+
+
+BSN=0
+
+car  $(L_1+\score_{1} k_1) / K_1 =
+-(L_2+\score_{2} k_1) / K_2$
+
+puis 
+$(L_1+\scoreh_{t+1,0,1} k_1) / K_1 =
+-(L_2+\scoreh_{t+1,0,2} k_1) / K_2 $
+
+EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}| $
+
+$\forall{n_{1-2}}\in [\![-10;10]\!], EAM \in [\![0,0.842]\!]$ 
+min et max en 0 et {-8,8}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Cas 3dim %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+2. Ajout d'un score après calcul par Mehestan
+
+Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
+
+
+$r_{t}= \begin{pmatrix}
+0 & n_{1-2} \\
+-n_{1-2} & 0 
+\end{pmatrix}$
+
+avec les scores bruts individuels calculés par l'algorithme Mehestan
+
+$\score_{t}= \begin{pmatrix}
+\score_{t,1} \\
+\score_{t,2} 
+\end{pmatrix}$
+
+Le contributeur effectue une nouvelle comparaison entre $E_{2}$ et $E_{3}$ avec une notation $n_{2-3} \in [\![-10;10]\!]$. Les scores sont cette fois-ci calculés par l'heuristique.
+
+$r_{t+1}= \begin{pmatrix}
+0 & n_{1-2} & 0\\
+-n_{1-2} & 0 & n_{2-3}\\
+0 & -n_{2-3} & 0
+\end{pmatrix}$
+
+$l_{t+1}= \begin{pmatrix}
+0 & l_1 & 0\\
+-l_1 & 0 & l_2\\
+0 & -l_2 & 0
+\end{pmatrix}
+$
+
+$k_{t+1}= \begin{pmatrix}
+0 & k_1 & 0\\
+k_1 & 0 & k_2\\
+0 & k_2 & 0
+\end{pmatrix}
+$
+
+avec 
+
+l_1= -\tilde{r_1}/\sqrt{(1-\tilde{r_1}²)}
+
+et k_1= (1-\tilde{r_1}²)³ 
+
+et \tilde{r_1} = n_{1-2}/(R_{max}+1)
+
+et ici R_{max}=10$
+
+$l_{t+1} \cdot k_{t+1}= \begin{pmatrix}
+0 & l_1 k_1 & 0\\
+-l_1 k_1 & 0 & l_2 k_2\\
+0 & -l_2 k_2 & 0
+\end{pmatrix}
+$
+
+$L_{t+1}= \begin{pmatrix}
+l_1 k_1\\
+-l_1 k_1 +l_2 k_2\\
+-l_2 k_2
+\end{pmatrix} \triangleq
+\begin{pmatrix}
+L1\\
+L2\\
+L3
+\end{pmatrix} 
+$
+
+$K_{aa,t+1}= \begin{pmatrix}
+\alpha + k_1\\
+\alpha +  k_1 + k_2\\
+\alpha + k_2
+\end{pmatrix} \triangleq
+\begin{pmatrix}
+K1\\
+K2\\
+K3
+\end{pmatrix} 
+$
+
+
+
+Pour \tau=0, A^{t+1,0}=\set{E_2,E_3}
+
+$ \scoreh_{t+1,0}= \begin{pmatrix}
+(L_2+\score_{1} k_1) / K_2 \\
+(L_3+\score_{2} k_2) / K_3
+\end{pmatrix}
+
+avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
+
+Pour \tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}
+
+$ \scoreh_{t+1,1}= \begin{pmatrix}
+(L_1+\scoreh_{t+1,0,2} k_1) / K_1 \\
+(L_2+\score_{1} k_1) / K_2 \\
+(L_3+\scoreh_{t+1,0,2} k_2) / K_3 
+\end{pmatrix}
+
+$BSN =
+(L_1+\scoreh_{t+1,0,2} k_1) / K_1 +
+(L_2+\score_{1} k_1 + \scoreh_{t+1,0,2} k_2)  / K_2 +
+(L_3+\scoreh_{t+1,0,2} k_2) / K_3 
+$
+
+$\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]$
+
+min et max en (-4, -9) et (4, 9)
+
+
+scores de Mehestan
+
+K_{t+1} \score_{t+1}= L_{t+1}
+
+\score_{t+1}=K^{-1}_{t+1} L
+
+avec 
+$ K_{t+1}= \begin{pmatrix}
+K_1&-k_{12}&-k_{13}\\
+-k_{12}&K_2&-k_{23}\\
+-k_{13}&-k_{23}&K_3
+\end{pmatrix}
+
+ici, $k_{12}=k1, k_{13}=0, k_{23}=k2$
+alors, 
+
+$ K_{t+1}= \begin{pmatrix}
+K_1&-k_1&0\\
+-k_1&K_2&-k_2\\
+0&-k_2&K_3
+\end{pmatrix}
+
+$ K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2-k_2^2 & k_1 K_2 & k_1 k_2 \\ k_1 K_2 & K_2 K_3 & k_2 K_3 \\ k_1 k_2 & k_2 K_3 & K_1 K_3-k_1^2 \end{array} \right)/(-K_2 k_1^2-k_2^2 K_3+K_1 K_2 K_3)$
+
+
+EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|  $
+
+
+$\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²  EAM \in [ 0.000,1.640 ]$ 
+min et max en ( 0,0 ) et  (-9 ,-7 )
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% VARIANTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+Variante : 
+Le contributeur effectue une nouvelle comparaison entre $E_{1}$ et $E_{3}$ avec une notation $n_{1-3} \in [\![-10;10]\!]$. Les scores sont cette fois-ci calculés par l'heuristique.
+
+$r_{t+1}= \begin{pmatrix}
+0 & n_{1-2} &  n_{1-3} \\
+-n_{1-2} & 0 & 0\\
+ -n_{1-3}  & 0 & 0
+\end{pmatrix}$
+
+$l_{t+1}= \begin{pmatrix}
+0 & l_1 & l_2\\
+-l_1 & 0 & 0\\
+-l_2 & 0 & 0
+\end{pmatrix}
+$
+
+$k_{t+1}= \begin{pmatrix}
+0 & k_1 &  k_2 \\
+k_1 & 0 & 0 \\
+ k_2 & 0 & 0
+\end{pmatrix}
+$
+
+
+$l_{t+1} \cdot k_{t+1}= \begin{pmatrix}
+0 & l_1 k_1 & l_2 k_2\\
+-l_1 k_1 & 0 & 0\\
+-l_2 k_2 & 0 & 0
+\end{pmatrix}
+$
+
+$L_{t+1}= \begin{pmatrix}
+l_1 k_1 +l_2 k_2 \\
+-l_1 k_1\\
+-l_2 k_2
+\end{pmatrix} \triangleq
+\begin{pmatrix}
+L1\\
+L2\\
+L3
+\end{pmatrix} 
+$
+
+$K_{aa,t+1}= \begin{pmatrix}
+\alpha + k_1 + k_2\\
+\alpha +  k_1 \\
+\alpha + k_2
+\end{pmatrix} \triangleq
+\begin{pmatrix}
+K1\\
+K2\\
+K3
+\end{pmatrix} 
+$
+
+
+
+Pour \tau=0, A^{t+1,0}=\set{E_1,E_3}
+
+$ \scoreh_{t+1,0}= \begin{pmatrix}
+(L_1+\score_{2} k_1) / K_1 \\
+(L_3+\score_{1} k_2) / K_3
+\end{pmatrix}
+
+avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
+
+Pour \tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}
+
+$ \scoreh_{t+1,1}= \begin{pmatrix}
+(L_1+\score_{2} k_1 + \scoreh_{t+1,0,3} k_2) / K_1 \\
+(L_2+\scoreh_{t+1,0,1} k_1) / K_2 \\
+(L_3+\scoreh_{t+1,0,1} k_2) / K_3 
+\end{pmatrix}
+
+$BSN =
+(L_1+\score_{2} k_1 + \scoreh_{t+1,0,3} k_2) / K_1 +
+(L_2+\scoreh_{t+1,0,1} k_1) / K_2 +
+(L_3+\scoreh_{t+1,0,1} k_2) / K_3 
+$
+
+$\forall{n_{1-2},n_{1-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]$
+
+
+min et max en (4, -9) et (-4, 9)
+
+scores de Mehestan
+
+K_{t+1} \score_{t+1}= L_{t+1}
+
+\score_{t+1}=K^{-1}_{t+1} L
+
+avec 
+$ K_{t+1}= \begin{pmatrix}
+K_1&-k_{12}&-k_{13}\\
+-k_{12}&K_2&-k_{23}\\
+-k_{13}&-k_{23}&K_3
+\end{pmatrix}
+
+ici, $k_{12}=k_1, k_{13}=k_2, k_{23}=0$
+alors, 
+
+$ K_{t+1}= \begin{pmatrix}
+K_1&-k_1&-k_2\\
+-k_1&K_2&0\\
+-k_2&0&K_3
+\end{pmatrix}
+
+$ K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2 & k_1 K_2 & k_2 K_1 \\ k_1 K_2 & K_2 K_3-k_2^2 & k_1 k_2 \\ k_2 K_1 & k_1 k_2 & K_1 K_3-k_1^2 \end{array} \right)/(-K_2 k_1^2-k_2^2 K_1+K_1 K_2 K_3)$
+
+EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|  $
+
+
+$\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²  EAM \in [0.000,1.640 ]$ 
+min et max en ( 0,0 ) et  (-9 ,7 )
+
+\subsection{Evaluation pratique de la qualité de l'heuristique}
 
 \pagebreak
