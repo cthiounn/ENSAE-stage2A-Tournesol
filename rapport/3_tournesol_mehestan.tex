@@ -2,7 +2,7 @@
 
 \subsection{Présentation générale}
 
-La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse suivante \href{https://tournesol.app}{https://tournesol.app}, est une plateforme en ligne, où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Pour cela, l'internaute doit au préalable s'inscrire sur la plateforme puis s'authentifier. Une fois authentifié, en tant que contributeur, il a la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations de la plateforme, après calcul et classement par l'algorithme Mehestan, recommandations générales ou par critère.
+La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse suivante \href{https://tournesol.app}{https://tournesol.app}, est un espace coopératif où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Pour cela, l'internaute doit au préalable s'inscrire sur la plateforme puis s'authentifier. Une fois authentifié, en tant que contributeur, il a la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations générales ou par critère de la plateforme, après calcul et classement par l'algorithme Mehestan.
 
 Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparaison et la recommandation de vidéos hébergées sur Youtube, une source d'informations aussi imparfaite soit-elle, mais peut très bien proposer des comparaisons sur d'autres champs, tel que le choix d'un candidat comme pour l'élection présidentielle 2022, ou pour des revues par les pairs d'articles scientifiques.
 
@@ -33,7 +33,7 @@ Une comparaison est donc un 4-uplet (n, a, b, liste de couple score-critère (s,
 
 Le score utilisé pour la recommandation est actuellement calculé sur le critère principal et les scores sur les autres critères secondaires sont calculées de manière approximativement similaire. Ainsi, la suite de ce rapport se focalisera sur le calcul du score du critère principal.
 
-\subsubsection{Problème inverse bayésien}
+\subsubsection{Approche bayésienne pour un problème inverse}
 Hypothèse : les recommandations formulées par un contributeur sont à un bruit près les véritables préférences du contributeur
 
 
@@ -52,7 +52,7 @@ L'algorithme Mehestan fonctionne en trois phases :
 \end{enumerate}
 \subsubsection{Construction des scores individuels}
 
-Pour chaque contributeur, à partir de sa matrice de comparaison r_t, le vecteur des scores individuels bruts et des incertitudes est calculé à partir des formules énoncées précédemment
+Pour chaque contributeur, à partir de sa matrice de comparaison $r_t$, le vecteur des scores individuels bruts et des incertitudes est calculé à partir des formules énoncées précédemment
 
 \subsubsection{Construction du réétalonnage et des scores normalisés}
 
