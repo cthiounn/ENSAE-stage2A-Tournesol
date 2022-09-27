@@ -32,3 +32,9 @@ update core_user
 drop sequence id_seq;
 
 select count(*) from core_user
+
+create sequence id_seq;
+update tournesol_entity  
+  set uid = nextval('id_seq')
+  where type='video';
+drop sequence id_seq;
