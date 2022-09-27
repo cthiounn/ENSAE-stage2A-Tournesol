@@ -1,0 +1,8 @@
+#!/bin/sh
+
+shoot() {
+    TOKEN=`xh -I post localhost:8000/o/token/ --raw "grant_type=password&username=user$1&password=tournesolpassword&scope=read+write+groups&response_type=code+id_token+token" Host:"localhost:8000" User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0" Accept:"*/*" Accept-Language:"en-US,en;q=0.5" Accept-Encoding:"gzip, deflate, br" Referer:"http://localhost:3000/" Content-Type:"application/x-www-form-urlencoded" Authorization:"Basic WWxma0x6dlZqbUd3M2dqSnpkbEZ1TUZXY1I2NGZBazRXTmc1dWNHZzppQjlqOWhNNWVrRnBLbFpRNnVOR2xvRkpJV0xWbnE4TG9HN1NOZEN0SFk1b003dzlLWTBYanBhRHV3d0o0MEJzaEg3aktZWm1YbmlheWJoclFmNXA0aXJBT01XdjgyUmRZUk1ENlRUU0pjaVpFQXhuOW9ucEtRb1VnVWVEcXNSag=="  Content-Length:"119" Origin:"http://localhost:3000" Connection:"keep-alive" Sec-Fetch-Dest:"empty" Sec-Fetch-Mode:"cors" Sec-Fetch-Site:"same-site" | grep access_token | jq '.access_token' | tr -d '"'`
+    xh -I post :8000/users/me/comparisons/videos entity_a:='{"uid":"yt:'$2'"}' entity_b:='{"uid":"yt:'$3'"}' criteria_scores:='[{"criteria":"largely_recommended","score":'$4'}]' Host:"localhost:8000" User-Agent:"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0" Accept:"application/json" Accept-Language:"en" Accept-Encoding:"gzip, deflate, br" Referer:"http://localhost:3000/" authorization:"Bearer ${TOKEN}" content-type:"application/json" Content-Length:"138" Origin:"http://localhost:3000" Connection:"keep-alive" Sec-Fetch-Dest:"empty" Sec-Fetch-Mode:"cors" Sec-Fetch-Site:"same-site"
+}
+
+while read -r userid va vb score; do shoot $userid $va $vb $score; done <$1

@@ -35,6 +35,6 @@ select count(*) from core_user
 
 create sequence id_seq;
 update tournesol_entity  
-  set uid = nextval('id_seq')
+  set uid = 'yt:'||LPAD(CAST(nextval('id_seq') as VARCHAR),11,'0')
   where type='video';
 drop sequence id_seq;
