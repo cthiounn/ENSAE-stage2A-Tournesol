@@ -7,6 +7,10 @@
 --where nb_comparison>=1000
 --)
 
+update tournesol_poll
+set active=False
+where id=2;
+
 insert into core_emaildomain (domain,status) values ('@example.fr','ACK');
 
 
