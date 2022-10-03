@@ -2,7 +2,8 @@
 
 \subsection{Présentation générale}
 
-La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse suivante \href{https://tournesol.app}{https://tournesol.app}, est un espace coopératif où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Pour cela, l'internaute doit au préalable s'inscrire sur la plateforme puis s'authentifier. Une fois authentifié, en tant que contributeur, il a la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations générales ou par critère de la plateforme, après calcul et classement par l'algorithme Mehestan.
+La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse
+\href{https://tournesol.app}{tournesol.app}, est un espace coopératif où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Pour cela, l'internaute doit au préalable s'inscrire sur la plateforme puis s'authentifier. Une fois authentifié, en tant que contributeur, il a la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations générales ou par critère de la plateforme, après calcul et classement par l'algorithme Mehestan.
 
 Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparaison et la recommandation de vidéos hébergées sur Youtube, une source d'informations aussi imparfaite soit-elle, mais peut très bien proposer des comparaisons sur d'autres champs, tel que le choix d'un candidat comme pour l'élection présidentielle 2022, ou pour des revues par les pairs d'articles scientifiques.
 
@@ -27,15 +28,23 @@ Au delà de proposer des recommandations, Tournesol a pour ambition de constitue
 
 Dans le cadre d'une modélisation statistique bayésienne, sous hypothèse qu'il existe pour chaque entité un score réel avec une relation d'ordre, soit $\theta_{a}\in\Theta=\mathbf{R}$ le paramètre à estimer représentant le score de l'entité a.
 
-Le contributeur n compare deux entités a et b en notant selon un critère principal et un ou plusieurs critères secondaires optionnelles sur une échelle de $R_{min}=-10$ à $R_{max}=10$
+Le contributeur n compare deux entités a et b en notant selon un critère principal et un ou plusieurs critères secondaires optionnelles sur une échelle de $R_{min}=-10$ à $R_{max}=10$.
 
-Une comparaison est donc un 4-uplet (n, a, b, liste de couple score-critère (s,c))
+Une comparaison est donc un 4-uplet (n, a, b, liste de couple notation-critère (r,c))
 
-Le score utilisé pour la recommandation est actuellement calculé sur le critère principal et les scores sur les autres critères secondaires sont calculées de manière approximativement similaire. Ainsi, la suite de ce rapport se focalisera sur le calcul du score du critère principal.
+Le score utilisé pour la recommandation est actuellement calculé sur le critère principal et les scores sur les autres critères secondaires sont calculées de manière approximativement similaire. Ainsi, la suite de ce rapport se focalisera sur le calcul du score du critère principal à partir des notations sur ce critère principal.
+
 
 \subsubsection{Approche bayésienne pour un problème inverse}
-Hypothèse : les recommandations formulées par un contributeur sont à un bruit près les véritables préférences du contributeur
 
+La plateforme Tournesol collecte les préférences déclarées des contributeurs et cherche à en déduire les préférences réelles à partir de ces observations. L'inférence des valeurs réelles à partir des observations constitue le coeur des problèmes inverses, à partir d'une transformation linéaire ou non entre observations et valeurs réelles. Pour cela, l'approche bayésienne permet d'estimer ces valeurs réelles en effectuant quelques hypothèses :
+
+
+Hypothèse 1 : les recommandations formulées par un contributeur sont à un bruit près les véritables préférences du contributeur
+
+Hypothèse 2 : pour des raisons de parcimonie de calcul, le bruit est considéré gaussien et indépendant temporellement entre chaque comparaison d'un même contributeur. Cette hypothèse simplificatrice peut être remise en compte et améliorée. Dans une première version, Tournesol adopte cette hypothèse simplificatrice afin de pouvoir proposer un premier système de recommandation robuste.
+
+Soit r, la notation du contributeur n entre les entités a et b
 
 formule
 
@@ -56,9 +65,12 @@ Pour chaque contributeur, à partir de sa matrice de comparaison $r_t$, le vecte
 
 \subsubsection{Construction du réétalonnage et des scores normalisés}
 
-Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle.
+Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle. L'algorithme calcule un noyau d'utilisateur de référence puis calcul tous les réétalonnages de chaque utilisateur par rapport à ce noyau. 
 
 \subsubsection{Construction des scores des entités}
+
+L'algorithme calcule les scores globaux en utilisant \gls{qrmed} sur les scores normalisés des contributeurs pour chaque entité.
+
 
 \pagebreak
 
