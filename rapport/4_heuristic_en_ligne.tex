@@ -88,19 +88,19 @@ $\score_{t+1}= \begin{pmatrix}
 
 avec $\score_{t+1,1}  = -\score_{t+1,2} = l_1 k_1/(\alpha+2 k_2)$
 
-L'heuristique donne pour \tau=0, A^{t+1,0}=\set{E_1,E_2}
+L'heuristique donne pour $\tau=0, A^{t+1,0}=\set{E_1,E_2}$
 
 $ \scoreh_{t+1,0}= \begin{pmatrix}
 (L_1+\score_{1} k_1) / K_1 \\
 (L_2+\score_{2} k_1) / K_2
-\end{pmatrix}
+\end{pmatrix}$
 
-pour \tau=1, A^{t+1,1}=\set{E_1,E_2}
+pour $\tau=1, A^{t+1,1}=\set{E_1,E_2}$
 
 $ \scoreh_{t+1,1}= \begin{pmatrix}
 (L_1+\scoreh_{t+1,0,1} k_1) / K_1 \\
 (L_2+\scoreh_{t+1,0,2} k_1) / K_2
-\end{pmatrix}
+\end{pmatrix}$
 
 
 BSN=0
@@ -161,13 +161,13 @@ $
 
 avec 
 
-l_1= -\tilde{r_1}/\sqrt{(1-\tilde{r_1}²)}
+$l_1= -\tilde{r_1}/\sqrt{(1-\tilde{r_1}²)}$
 
-et k_1= (1-\tilde{r_1}²)³ 
+et $k_1= (1-\tilde{r_1}²)³ $
 
-et \tilde{r_1} = n_{1-2}/(R_{max}+1)
+et $\tilde{r_1} = n_{1-2}/(R_{max}+1)$
 
-et ici R_{max}=10$
+et ici $R_{max}=10$
 
 $l_{t+1} \cdot k_{t+1}= \begin{pmatrix}
 0 & l_1 k_1 & 0\\
@@ -202,7 +202,7 @@ $
 
 
 
-Pour \tau=0, A^{t+1,0}=\set{E_2,E_3}
+Pour $\tau=0, A^{t+1,0}=\set{E_2,E_3}$
 
 $ \scoreh_{t+1,0}= \begin{pmatrix}
 (L_2+\score_{1} k_1) / K_2 \\
@@ -211,7 +211,7 @@ $ \scoreh_{t+1,0}= \begin{pmatrix}
 
 avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
 
-Pour \tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}
+Pour $\tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}$
 
 $ \scoreh_{t+1,1}= \begin{pmatrix}
 (L_1+\scoreh_{t+1,0,2} k_1) / K_1 \\
@@ -232,9 +232,9 @@ min et max en (-4, -9) et (4, 9)
 
 scores de Mehestan
 
-K_{t+1} \score_{t+1}= L_{t+1}
+$K_{t+1} \score_{t+1}= L_{t+1}$
 
-\score_{t+1}=K^{-1}_{t+1} L
+$\score_{t+1}=K^{-1}_{t+1} L$
 
 avec 
 $ K_{t+1}= \begin{pmatrix}
@@ -326,7 +326,7 @@ $
 
 
 
-Pour \tau=0, A^{t+1,0}=\set{E_1,E_3}
+Pour $\tau=0, A^{t+1,0}=\set{E_1,E_3}$
 
 $ \scoreh_{t+1,0}= \begin{pmatrix}
 (L_1+\score_{2} k_1) / K_1 \\
@@ -335,7 +335,7 @@ $ \scoreh_{t+1,0}= \begin{pmatrix}
 
 avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
 
-Pour \tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}
+Pour $\tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}$
 
 $ \scoreh_{t+1,1}= \begin{pmatrix}
 (L_1+\score_{2} k_1 + \scoreh_{t+1,0,3} k_2) / K_1 \\
@@ -356,9 +356,9 @@ min et max en (4, -9) et (-4, 9)
 
 scores de Mehestan
 
-K_{t+1} \score_{t+1}= L_{t+1}
+$K_{t+1} \score_{t+1}= L_{t+1}$
 
-\score_{t+1}=K^{-1}_{t+1} L
+$$\score_{t+1}=K^{-1}_{t+1} L$
 
 avec 
 $ K_{t+1}= \begin{pmatrix}
@@ -387,10 +387,18 @@ min et max en ( 0,0 ) et  (-9 ,7 )
 \subsection{Evaluation pratique de la qualité de l'heuristique}
 \subsubsection{Evaluation par des tests déterministiques}
 
-Dans un premier temps, les tests Django mis en place adhoc permettent de tester des cas simples, mais non exhaustif de l'ensemble de l'espace des possibilités.
+Dans un premier temps, les tests Django mis en place adhoc permettent de tester des cas simples, mais non exhaustifs de l'ensemble de l'espace des possibilités. Ces premiers tests permettent d'avoir un premier aperçu du comportement de l'heuristique.
+
+Ex-nihilo : ajout d'une comparaison à 10
+Depuis une comparaison : ajout d'une nouvelle comparaison 10, modification de la comparaison à 0, suppression de la comparaison
+Ex-nihilo : ajout séquentielle de toutes les comparaisons sur 10 entités à 10
+Depuis la situation précédente : modifications séquentielles des comparaisons à -10
 
 \subsubsection{Evaluation par des simulations de Monte-Carlo}
 
+Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministiques avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo
+
+Pour des raisons de temps, la démarche s'est focalisée sur l'ajout, mais pourrait s'appliquer pour de la modification et de la suppression, voire d'ajouter une loi sur l'action du contributeur (ajout, modification, suppression). 
 1. Profil uniforme
 2. Profil Gaussien
 3. Profil extrême
