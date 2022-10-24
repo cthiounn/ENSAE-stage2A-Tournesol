@@ -14,14 +14,21 @@ Les conditions du premier ordre de la maximisation de la vraisemblance a posteri
 Les comparaisons relatives constituent un système à somme nulle, puisque des quantités sont ajoutées et retirées de manière asymétrique. Les scores individuels bruts sont à somme nulle. En cas de somme non nulle, le biais signifie que des scores sont sous-estimés ou sur-estimés sans justification valable. Par conséquent, par exemple, si les scores sont d'une entité sont sous-estimés par plusieurs contributeurs, alors le score global de l'entité peut être lui aussi sous-estimé. Il convient alors de mesurer et de maîtriser cette déformation des poids dans un premier temps d'une manière grossière.
 
 Soit l'indicateur \gls{bsn},
-$BSN=$
+
+\begin{equation}
+BSN= \sum
+\end{equation}
+
 
 \subsubsection{Somme des écarts absolus entre résultats de l'heuristique et de Mehestan}
 
 Comme l'heuristique permet d'avoir des résultats approchés des scores calculés Mehestan, la somme des écarts absolus constitue une mesure de la convergence entre les deux algorithmes. Idéalement, cet indicateur devrait tendre vers zéro si possible. Dans le cas contraire, il est nécessaire de mesurer à quel point les résultats de l'heuristique s'écartent des scores réels et d'affiner l'heuristique pour diminuer l'écart.
 
 Soit l'indicateur \gls{eam}
-$EAM=$
+\begin{equation}
+EAM= \sum_{i=1}^{n}
+\end{equation}
+
 
 
 De plus, la somme des écarts absolus des incertitudes donne une idée de la déformation de l'intervalle de confiance.
@@ -31,13 +38,13 @@ En outre, la somme des écarts sous-estimés et la somme des écarts sur-estimé
 
 \subsubsection{Temps de rapidité de l'heuristique}
 
-Une heuristique doit être suffisamment rapide pour permettre d'être pour la plateforme Tournesol, joué plusieurs fois par contributeur et en concurrence avec d'autres contributeurs.
+Une heuristique doit être suffisamment rapide pour la plateforme Tournesol pour permettre d'être joué plusieurs fois par contributeur et en concurrence avec d'autres contributeurs.
 
 
 \subsection{Calcul théorique de l'heuristique proposée}
 %\subsubsection{Evaluation des bornes sur l'estimateur \gls{BSN}}
 
-1. Ajout d'un premier score 
+\subsubsection{Ajout d'un premier score}
 
 Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
 
@@ -119,8 +126,8 @@ min et max en 0 et {-8,8}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Cas 3dim %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsubsection{Ajout d'un score après calcul par Mehestan}
 
-2. Ajout d'un score après calcul par Mehestan
 
 Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
 
@@ -389,35 +396,80 @@ min et max en ( 0,0 ) et  (-9 ,7 )
 
 Dans un premier temps, les tests Django mis en place adhoc permettent de tester des cas simples, mais non exhaustifs de l'ensemble de l'espace des possibilités. Ces premiers tests permettent d'avoir un premier aperçu du comportement de l'heuristique.
 
-Ex-nihilo : ajout d'une comparaison à 10
-Depuis une comparaison : ajout d'une nouvelle comparaison 10, modification de la comparaison à 0, suppression de la comparaison
-Ex-nihilo : ajout séquentielle de toutes les comparaisons sur 10 entités à 10
-Depuis la situation précédente : modifications séquentielles des comparaisons à -10
+\begin{enumerate}
+    \item Ex-nihilo : ajout d'une comparaison à 10
+    \item Depuis une comparaison : ajout d'une nouvelle comparaison 10, modification de la comparaison à 0, suppression de la comparaison
+    \item Ex-nihilo : ajout séquentielle de toutes les comparaisons sur 10 entités à 10
+    \item Depuis la situation précédente : modifications séquentielles des comparaisons à -10
+\end{enumerate}
+
+
+
 
 \subsubsection{Evaluation par des simulations de Monte-Carlo}
 
-Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministiques avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo
+Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministiques avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo (...)
 
 Pour des raisons de temps, la démarche s'est focalisée sur l'ajout, mais pourrait s'appliquer pour de la modification et de la suppression, voire d'ajouter une loi sur l'action du contributeur (ajout, modification, suppression). 
-1. Profil uniforme
-2. Profil Gaussien
-3. Profil extrême
+
+\paragraph{Profil uniforme}
+
+Dans un premier temps, l'évaluation se fait avec un prior non informatif avec une loi uniforme sur $[\![-10,10]\!]$.
+
+\paragraph{Profil Gaussien}
+
+Dans un second temps, dans une démarche d'analyse de sensibilité, une loi gaussienne discrète centrée est considérée comme prior.
+
+\begin{figure}[ht]
+  \includegraphics[width=\linewidth]{gauss.png}
+  \caption{Profil d'une notation centrée autour de 0, distribution sur 10000 tirages}
+  % \vspace{-15pt}
+\end{figure}
+
+
+
+\paragraph{Profil extrême}
+
+
+\begin{figure}[ht]
+  \includegraphics[width=\linewidth]{antigauss.png}
+  \caption{Profil d'une notation polarisante, distribution sur 10000 tirages}
+  % \vspace{-15pt}
+\end{figure}
+
+\paragraph{D'autres profils possibles}
+
+trimodal
+
+\paragraph{Résultats}
+
+Pour les trois profils, les simulations donnent un indicateur \gls{bsn} suivant un loi gaussienne centrée, pour 10 et 100 ajouts de nouvelles comparaisons.
+Concernant le \gls{EAM}, pour les trois profils, les simulations montrent que l'écart entre l'heuristique et l'algorithme Mehestan est important pour l'ajout de 10 nouvelles comparaisons. Toutefois, cet écart s'amenuise pour 100 nouvelles comparaisons.
+
+
 \subsubsection{Evaluation sur données réelles}
 
-1. Chargement de la base de données publiques
 
-Réinitialisation de la base de données et chargement de la base de données publiques par Django (branche Adrien)
+\paragraph{Méthodologie}
 
-2. Modifications préalable
+Pour évaluer l'heuristique sur les données publiques de Tournesol, à volumétrie réelle, la démarche en quatre étapes est la suivante :
 
-Afin de faciliter l'automatisation, les noms d'utilisateurs des contributeurs ont été renommés de user1 à usern et leur mot de passe réinitialisé à "tournesolpassword". De manière similaire, les entités sont renommés de yt:00000000001 à yt:000000nnnnn. Les contributeurs ayant plus de 1000 comparaisons ont été promus "supertrusted", attribut non publique servant de base de sondage pour la mise en place du réétalonnage.
+\begin{enumerate}
+    \item Chargement de la base de données publiques
+    \item Modifications préalable
+    \item Tirage de l'échantillon
+    \item Tirs sur l'application
+\end{enumerate}
+L'évaluation de l'heuristique a été réalisé en environnement de developpement en local pour éviter les effets de réseau avec une volumétrie réelle, soit 3x xxx comparaisons.
+Dans un premier temps, il est nécessaire de réinitialiser la base de données de développement, puis de charger les données publiques par Django à l'aide de la fonctionnalité dédiée.
 
-3. Tirage de l'échantillon
+Dans un second temps, afin de faciliter l'automatisation, les noms d'utilisateurs des contributeurs ont été renommés de user1 à usern et leur mot de passe réinitialisé à "tournesolpassword". De manière similaire, les entités sont renommés de yt:00000000001 à yt:000000nnnnn. Les contributeurs ayant plus de 1000 comparaisons ont été promus "supertrusted", attribut non public servant de base de sondage pour la mise en place du réétalonnage.
 
-lois uniformes
+Ensuite, parmi tous les couples (utilisateur,entité, notation), un échantillon de xx xxx n-uplets a été tiré en suivant une loi uniforme.
 
-4. Tirs
+Enfin, à partir de l'échantillon tiré, le logiciel xh effectue chaque comparaison, de manière automatisée, à la place du conttributeur.
 
-xh
+
+\paragraph{Résultats}
 
 \pagebreak

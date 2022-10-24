@@ -12,6 +12,10 @@
 \usepackage{footnotehyper}
 \usepackage{comment} % pour masquer des passages
 \usepackage{titling}
+\usepackage{titlesec}
+\usepackage{amsmath}
+
+\newtheorem{hypothesis}{Hypothèse}
 
 \newcommand{\score}{\theta^*}
 \newcommand{\scoreh}{\theta^h}
@@ -54,6 +58,13 @@
   name={fairness},
   description={caractérisation de l'équité},
 }
+
+\newglossaryentry{diffpriv}
+{
+  name={differential privacy},
+  description={Confidentialité différentielle},
+}
+
 \newacronym{ia}{IA}{Intelligence Artificielle}
 \newacronym{gofai}{GOFAI}{Good Old Fashion Artificial Intelligence}
 \newacronym{ml}{ML}{Machine Learning}
@@ -72,7 +83,9 @@
 % Police utilisée
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
-
+\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% Notations, code, mathématiques
 %%%%%%%%%%%%%%%%%%%%%%%%%
