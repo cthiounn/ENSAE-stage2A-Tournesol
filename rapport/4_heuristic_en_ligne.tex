@@ -1,22 +1,86 @@
 \section{Heuristiques en ligne}
-Afin de permettre un calcul rapide, les heuristiques sont un compromis entre rapidité et fiabilité. En effet, une heuristique est une méthode de calcul rapide, sans toutefois être exact ou optimal.
+Afin de permettre un calcul rapide, les heuristiques sont un compromis entre rapidité et fiabilité. En effet, une heuristique est une méthode de calcul rapide, sans toutefois être exact ou optimal. L'association Tournesol souhaite ici mettre en place une heuristique permettant, dès qu'une comparaison est opérée, le calcul et la mise à jour des scores concernés.
 
 \subsection{Première heuristique}
 
-Les conditions du premier ordre de la maximisation de la vraisemblance a posteriori donnent :
+Les conditions du premier ordre de la maximisation de la vraisemblance \textit{a posteriori} (\ref{equation:cpo}) donnent en regroupant les termes en $\theta^{*}_a$ à gauche :
 
+\begin{equation}
+ \forall a \in A,   (\alpha_{prior} + \sum_{ab \in AB} k_{ab}) \theta^{*}_a = \sum_{ab \in AB} k_{ab}(\theta^{*}_b + \ell(\Tilde{r_{ab}}))
+\end{equation}
+
+Au lieu de résoudre simultanément le système d'équations, où l'inversion matricielle est de l'ordre de $\mathcal{O}(n^3)$\footnote{Les meilleurs algorithmes sont de l'ordre de $\mathcal{O}(n^{2.373})$}, l'idée est d'appliquer une descente de coordonnées à partir du dernier état connu, idéalement à partir des coordonnées exactes données par l'algorithme Mehestan. 
+
+Comme l'heuristique consiste à mettre à jour le score de a et b pour une comparaison entre ces deux dernières entités, les scores de a et b sont mis à jour à partir des scores précédents des entités connexes, en itérant $\tau$ fois en cercle concentrique dans le graphe de connexité.
+
+\begin{equation}
+  \forall e \in \set{a,b}, \theta^{heuristique}_e = \sum_{ab \in AB} k_{ab}(\theta^{dernier score}_b + \ell(\Tilde{r_{ab}})) (\alpha_{prior} + \sum_{ab \in AB} k_{ab})^{-1}
+\end{equation}
+
+\pagebreak
+
+\begin{algorithm}
+\renewcommand{\algorithmcfname}{Algorithme}
+\caption{Heuristique pour le calcul des scores individuels de a et de b et des incertitudes par descente de coordonnées}\label{alg:local_scores_matrix_inversion}
+\KwData{la matrice de comparaison $r_t$, l'hyperparamètre de l'a priori $\alpha_{prior}$, les scores précédents $\score$, $\tau$ le nombre d'itérations}
+\KwRes{les scores individuels de a et b $\scoreh$ et leur incertitude $\deltascoreh$}
+
+$ Ensemble \leftarrow \set{a,b}$
+
+$ Iteration \leftarrow 1$
+
+$ \scoreh_0 \leftarrow \score $
+
+\Tq{$Iteration \leq \tau$}{
+
+
+$ \scoreh_{Iteration} \leftarrow \scoreh_{Iteration-1} $
+
+\PourCh{$element \in Ensemble$}{
+
+$\Tilde{r_t} \leftarrow r_t/(1+R_{max})$
+
+$\ell_t \leftarrow -\Tilde{r_t}/\sqrt{1-\Tilde{r_t}^2}$
+
+$k_t \leftarrow (1-\Tilde{r_t}^2)^3$
+
+$K_{aa,t} \leftarrow \alpha_{prior} + \sum_{b \in N(A)} k_{ab,t}$
+
+$L_t \leftarrow \sum_{b \in N(A)} k_{ab,t}l_{ab,t}$
+
+
+$\scoreh_{element,Iteration} \leftarrow  (L_t + \sum_{b \in N(A)}k_{ab,t}\scoreh_{Iteration-1})/K_{aa,t}$
+
+$\deltascoreh_{element,Iteration} \leftarrow \frac{1}{card(AB)} \left( 1 + \sum_{ab \in AB} k_{ab,t}(l_{ab,t} - \scoreh_{ab,Iteration-1})^2 \right)$
+
+}
+
+$Ensemble \leftarrow Voisinage(Ensemble) \cup Ensemble $
+
+$Iteration \leftarrow Iteration + 1$
+
+}
+
+
+$ \scoreh \leftarrow \scoreh_\tau $
+
+$ \deltascoreh \leftarrow \deltascoreh_\tau $
+
+
+\Return{$\scoreh,\deltascoreh$}
+\end{algorithm}
 
 \subsection{Proposition d'estimateurs mesurant la qualité de l'heuristique}
 
 
 \subsubsection{Biais de somme nulle}
 
-Les comparaisons relatives constituent un système à somme nulle, puisque des quantités sont ajoutées et retirées de manière asymétrique. Les scores individuels bruts sont à somme nulle. En cas de somme non nulle, le biais signifie que des scores sont sous-estimés ou sur-estimés sans justification valable. Par conséquent, par exemple, si les scores sont d'une entité sont sous-estimés par plusieurs contributeurs, alors le score global de l'entité peut être lui aussi sous-estimé. Il convient alors de mesurer et de maîtriser cette déformation des poids dans un premier temps d'une manière grossière.
+Les comparaisons relatives constituent un système à somme nulle, puisque des quantités sont ajoutées et retirées de manière asymétrique. Les scores individuels bruts sont à somme nulle. En cas de somme non nulle, le biais signifie que des scores sont sous-estimés ou sur-estimés sans justification valable. Par conséquent, par exemple, si les scores d'une entité sont sous-estimés par plusieurs contributeurs, alors le score global de l'entité peut être lui aussi sous-estimé. Il convient alors de mesurer et de maîtriser cette déformation des poids dans un premier temps d'une manière grossière.
 
 Soit l'indicateur \gls{bsn},
 
 \begin{equation}
-BSN= \sum
+BSN= \sum_{a \in A} \theta^{heuristique}_{a}
 \end{equation}
 
 
@@ -24,9 +88,9 @@ BSN= \sum
 
 Comme l'heuristique permet d'avoir des résultats approchés des scores calculés Mehestan, la somme des écarts absolus constitue une mesure de la convergence entre les deux algorithmes. Idéalement, cet indicateur devrait tendre vers zéro si possible. Dans le cas contraire, il est nécessaire de mesurer à quel point les résultats de l'heuristique s'écartent des scores réels et d'affiner l'heuristique pour diminuer l'écart.
 
-Soit l'indicateur \gls{eam}
+Soit l'indicateur \gls{eam},
 \begin{equation}
-EAM= \sum_{i=1}^{n}
+EAM= \sum_{a \in A} \left| \theta^{heuristique}_{a}-\theta^{Mehestan}_{a} \right| 
 \end{equation}
 
 
@@ -86,43 +150,52 @@ K2
 \end{pmatrix} 
 $
 
-avec les scores bruts individuels calculés par l'algorithme Mehestan
+avec les scores bruts individuels calculés par l'algorithme Mehestan (cf Exemple \ref{example:n1})
 
 $\score_{t+1}= \begin{pmatrix}
 \score_{t+1,1} \\
 \score_{t+1,2} 
+\end{pmatrix}=
+\begin{pmatrix}
+l_1k_1 / (\alpha + 2k_1)\\
+-l_1k_1 / (\alpha + 2k_1)\\
 \end{pmatrix}$
-
-avec $\score_{t+1,1}  = -\score_{t+1,2} = l_1 k_1/(\alpha+2 k_2)$
 
 L'heuristique donne pour $\tau=0, A^{t+1,0}=\set{E_1,E_2}$
 
-$ \scoreh_{t+1,0}= \begin{pmatrix}
+\begin{equation*}
+\scoreh_{t+1,0}= \begin{pmatrix}
 (L_1+\score_{1} k_1) / K_1 \\
 (L_2+\score_{2} k_1) / K_2
-\end{pmatrix}$
+\end{pmatrix}
+\end{equation*}
 
 pour $\tau=1, A^{t+1,1}=\set{E_1,E_2}$
 
-$ \scoreh_{t+1,1}= \begin{pmatrix}
+
+\begin{equation*}
+\scoreh_{t+1,1}= \begin{pmatrix}
 (L_1+\scoreh_{t+1,0,1} k_1) / K_1 \\
 (L_2+\scoreh_{t+1,0,2} k_1) / K_2
-\end{pmatrix}$
+\end{pmatrix}
+\end{equation*}
+
+\begin{equation*}
+\gls{bsn}=0
+\end{equation*}
 
 
-BSN=0
-
-car  $(L_1+\score_{1} k_1) / K_1 =
--(L_2+\score_{2} k_1) / K_2$
+car  $(L_1+\score_{1} k_1) / K_1 = -(L_2+\score_{2} k_1) / K_2$
 
 puis 
-$(L_1+\scoreh_{t+1,0,1} k_1) / K_1 =
--(L_2+\scoreh_{t+1,0,2} k_1) / K_2 $
+$(L_1+\scoreh_{t+1,0,1} k_1) / K_1 = -(L_2+\scoreh_{t+1,0,2} k_1) / K_2 $
 
-EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}| $
+$\gls{eam}=  |\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}| $
+\begin{equation*}
+\forall{n_{1-2}}\in [\![-10;10]\!], EAM \in [0,0.842]
+\end{equation*}
 
-$\forall{n_{1-2}}\in [\![-10;10]\!], EAM \in [\![0,0.842]\!]$ 
-min et max en 0 et {-8,8}
+Le minimum et le maximum sont atteints respectivement en $n_{1-2}=0$ et en -8 ou 8.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% Cas 3dim %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -232,9 +305,12 @@ $BSN =
 (L_3+\scoreh_{t+1,0,2} k_2) / K_3 
 $
 
-$\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]$
+\begin{equation*}
+    \forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]
+\end{equation*}
 
-min et max en (-4, -9) et (4, 9)
+
+Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{2-3})=(-4, -9)$ et en (4, 9).
 
 
 scores de Mehestan
@@ -264,9 +340,12 @@ $ K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2-k_2^2 & k_1 K_2 & k_1 k_2 \\ k
 
 EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|  $
 
+\begin{equation*}
+\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²  EAM \in [ 0.000,1.640 ]
+\end{equation*}
 
-$\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²  EAM \in [ 0.000,1.640 ]$ 
-min et max en ( 0,0 ) et  (-9 ,-7 )
+
+Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{2-3})=(0, 0)$ et en (-9, -7).
 
 
 
@@ -338,7 +417,7 @@ Pour $\tau=0, A^{t+1,0}=\set{E_1,E_3}$
 $ \scoreh_{t+1,0}= \begin{pmatrix}
 (L_1+\score_{2} k_1) / K_1 \\
 (L_3+\score_{1} k_2) / K_3
-\end{pmatrix}
+\end{pmatrix}$
 
 avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
 
@@ -356,10 +435,13 @@ $BSN =
 (L_3+\scoreh_{t+1,0,1} k_2) / K_3 
 $
 
-$\forall{n_{1-2},n_{1-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]$
+\begin{equation*}
+    \forall{n_{1-2},n_{1-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]
+\end{equation*}
 
 
-min et max en (4, -9) et (-4, 9)
+Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{1-3})=(4, -9)$ et en (-4, 9).
+
 
 scores de Mehestan
 
@@ -387,9 +469,12 @@ $ K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2 & k_1 K_2 & k_2 K_1 \\ k_1 K_2
 
 EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|  $
 
+\begin{equation*}
+\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²,  EAM \in [0.000,1.640 ]
+\end{equation*}
 
-$\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²  EAM \in [0.000,1.640 ]$ 
-min et max en ( 0,0 ) et  (-9 ,7 )
+
+Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{1-3})=(0, 0)$ et en (-9, 7).
 
 \subsection{Evaluation pratique de la qualité de l'heuristique}
 \subsubsection{Evaluation par des tests déterministiques}
@@ -465,7 +550,7 @@ Dans un premier temps, il est nécessaire de réinitialiser la base de données 
 
 Dans un second temps, afin de faciliter l'automatisation, les noms d'utilisateurs des contributeurs ont été renommés de user1 à usern et leur mot de passe réinitialisé à "tournesolpassword". De manière similaire, les entités sont renommés de yt:00000000001 à yt:000000nnnnn. Les contributeurs ayant plus de 1000 comparaisons ont été promus "supertrusted", attribut non public servant de base de sondage pour la mise en place du réétalonnage.
 
-Ensuite, parmi tous les couples (utilisateur,entité, notation), un échantillon de xx xxx n-uplets a été tiré en suivant une loi uniforme.
+Ensuite, parmi tous les couples (utilisateur, entité, notation), un échantillon de xx xxx n-uplets a été tiré en suivant une loi uniforme.
 
 Enfin, à partir de l'échantillon tiré, le logiciel xh effectue chaque comparaison, de manière automatisée, à la place du conttributeur.
 

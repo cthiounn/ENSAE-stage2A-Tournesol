@@ -101,7 +101,7 @@ En particulier, une recommandation entre a et b est à la fois une contribution 
 
 Dans cette partie, R est le vecteur aléatoire des observations empilés.
 Soit $\theta$, le vecteur aléatoire des $\theta^\dagger$ empilés
-et soit $\pi(\theta)$ le prior de $\theta$ comme le produit de loi normale d'écart-type $\sigma_0$.
+et soit $\pi(\theta)$ le prior de $\theta$ comme le produit de loi normale d'écart-type $\frac{\sigma_0}{\alpha_{prior}}$, avec $\alpha_{prior}$ un coefficient positif de pénalisation du \textit{prior}. Plus $\alpha_{prior}$ est petit, moins le prior n'a d'influence dans la modélisation.
 
 La formule de Bayes donne  
 \begin{equation}
@@ -123,35 +123,46 @@ avec
   avec  $\tau=2\pi$
 
 \begin{equation}
- \pi(\theta)= \prod_{a \in A} \frac{1}{\sigma_0\sqrt{\tau}}\exp \left( -(\frac{\theta^\dagger_a}{\sqrt{2}\sigma_0})^2 \right)    
+ \pi(\theta)= \prod_{a \in A} \frac{1}{\sigma_0\sqrt{\tau}}\exp \left( -(\frac{\alpha_{prior}\theta^\dagger_a}{\sqrt{2}\sigma_0})^2 \right)    
 \end{equation}
 
 
 %$  -\ln{P(\ell|\theta^\dagger)}= \sum_{(a,b)\in AB} \frac{k_{ab}}{2\sigma_0^2}  (\ell(\Tilde{r_{ab}})-\theta_{ab}^\dagger)^2 + K $ avec K une constante réelle et AB l'ensemble des comparaisons entre deux paires d'entités%
-La log-vraisemblance \textit{a posteriori} s'écrit avec une constante K ne dépendant pas de $\theta$ :
+La log-vraisemblance négative \textit{a posteriori} s'écrit avec une constante K ne dépendant pas de $\theta$ :
 
 \begin{equation}
- log \mathcal{L} \triangleq \log{\pi(\theta|R)} = log(f(R|\theta)) + log(\pi(\theta))+ K     
+ -log \mathcal{L} \triangleq -\log{\pi(\theta|R)} = -log(f(R|\theta))  -log(\pi(\theta))+ K     
 \end{equation}
 
 
 \begin{equation}
- log \mathcal{L} = log(f(R|\theta)) + log(\pi(\theta))+ K     
+ -log \mathcal{L} = - log(f(R|\theta)) - log(\pi(\theta))+ K     
 \end{equation}
 
 \begin{equation}
- log \mathcal{L} = \frac{1}{2\sigma_0^2} \left( \sum_{ab \in AB} k_{ab}(\ell(\Tilde{r_{ab}})-\theta_{ab}^\dagger)^2 + \sum_{a \in A}\theta^\dagger_a^2 \right) + K'     
+ -log \mathcal{L} = \frac{1}{2\sigma_0^2} \left( \sum_{ab \in AB} k_{ab}(\ell(\Tilde{r_{ab}})-\theta_{ab}^\dagger)^2 + \alpha_{prior}\sum_{a \in A}\theta^\dagger_a^2 \right) + K'     
 \end{equation}
 
 avec $k_{ab} = \frac{1}{\ell'(\Tilde{r_{ab}})^2}$,
 
-L'estimateur du maximum \textit{a posteriori} se déduit des conditions du premier ordre de la log-vraisemblance \textit{a posteriori} car le problème est fortement convexe.
+L'estimateur du maximum \textit{a posteriori} se déduit des conditions du premier ordre de la log-vraisemblance négative \textit{a posteriori} car le problème est fortement convexe.
+
+\begin{equation}\label{equation:cpo}
+\forall a \in A, \sigma_0^2\frac{\partial{log\mathcal{L}}}{\partial{\theta_a^\dagger}} = 0 = \alpha_{prior}\theta^\dagger_a - \sum_{ab \in AB}k_{ab}(\ell(\Tilde{r_{ab}})-\theta_{a}^\dagger-\theta_{b}^\dagger)
+\end{equation}
+
+L'équation (\ref{equation:cpo}) établit un système d'équations linéaires à résoudre. Il peut s'écrire sous la forme matricielle $\theta^*=K^{-1}L$ avec K une matrice inversible et $\theta^*$ l'estimateur du maximum \textit{a posteriori} (MAP), avec $K = Mat(diag(\alpha_{prior}+\sum_{b \in N(A)} k_{ab}))   - Mat(k_{ab}) $
+et $L = Vect(\sum_{b \in N(A)} k_{ab}\ell(\Tilde{r_{ab}}))$.
+K est une matrice à diagonale dominante et strictement dominante pour tout $\alpha_{prior}$ strictement positif. En vertu du lemme d'Hadamard, K est inversible et assure l'unicité et l'existence de l'estimateur MAP, estimant le mode de la vraisemblance \textit{a posteriori}.
+
+La variance de cet estimateur est donnée par la formule suivante :
 
 \begin{equation}
-\forall a \in A, \sigma_0^2\frac{\partial{log\mathcal{L}}}{\partial{\theta_a^\dagger}} = 0 = \theta^\dagger_a + \sum_{ab \in AB}
 \end{equation}
+
 \subsection{Fonctionnement de l'algorithme Mehestan}
 
+Cette sous-section présente de manière succinct l'algorithme Mehestan. La construction des scores individuels est le pivot de l'algorithme et l'heuristique souhaité vise à réduire sa complexité algorithmique. Mesurer la qualité de l'heuristique revient à mesurer les écarts entre l'algorithme Mehestan et les résultats de l'heuristique sur cette partie, car cette dernière se substitue à la première. Néanmoins, pour avoir une idée plus précise de l'impact sur les scores finaux de Tournesol, il est nécessaire d'en comprendre leur construction et notamment la volonté d'obtenir des scores robustes aux attaques d'utilisateur malveillant voulant manipuler ces scores.
 L'algorithme Mehestan fonctionne en trois phases :
 
 \begin{enumerate}
@@ -163,6 +174,88 @@ L'algorithme Mehestan fonctionne en trois phases :
 
 Pour chaque contributeur, à partir de sa matrice de comparaison $r_t$, la première partie de l'algorithme calcule le vecteur des scores individuels bruts et des incertitudes à partir des formules énoncées précédemment
 
+\pagebreak
+
+\begin{algorithm}
+\renewcommand{\algorithmcfname}{Algorithme}
+\caption{Calcul des scores individuels et des incertitudes par inversion matricielle}\label{alg:local_scores_matrix_inversion}
+\KwData{la matrice de comparaison $r_t$, l'hyperparamètre de l'a priori $\alpha_{prior}$}
+\KwRes{les scores individuels $\score$ et l'incertitude associée $\deltascore$}
+
+$\Tilde{r_t} \leftarrow r_t/(1+R_{max})$
+
+$\ell_t \leftarrow -\Tilde{r_t}/\sqrt{1-\Tilde{r_t}^2}$
+
+$k_t \leftarrow (1-\Tilde{r_t}^2)^3$
+
+$K_{aa,t} \leftarrow \alpha_{prior} + \sum_{b \in N(A)} k_{ab,t}$
+
+$L_t \leftarrow \sum_{b \in N(A)} k_{ab,t}l_{ab,t}$
+
+$K_t \leftarrow Mat(diag(K_{aa,t})) - k_t $ 
+
+$\score \leftarrow K_t^-1 L_t$
+
+$\deltascore \leftarrow \frac{1}{card(AB)} \left( 1 + \sum_{ab \in AB} k_{ab,t}(l_{ab,t} - \score_{ab})^2 \right)$
+
+\Return{$\score, \deltascore$}
+\end{algorithm}
+
+\begin{exemple}\label{example:n1}
+
+
+
+Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
+
+$r_{t}= \begin{pmatrix}
+0 & n_{1-2} \\
+-n_{1-2} & 0 
+\end{pmatrix}$
+
+$l_{t}= \begin{pmatrix}
+0 & l_1 \\
+-l_1 & 0 \\
+\end{pmatrix}
+$
+
+$k_{t}= \begin{pmatrix}
+0 & k_1 \\
+k_1 & 0 \\
+\end{pmatrix}
+$
+
+$K_{aa,t}= \begin{pmatrix}
+\alpha + k_1\\
+\alpha +  k_1\\
+\end{pmatrix} 
+$
+
+$L_{t}= \begin{pmatrix}
+l_1 k_1\\
+-l_1 k_1 \\
+\end{pmatrix} 
+$
+
+$K_{t}= \begin{pmatrix}
+\alpha + k_1 & -k_1 \\
+-k_1 & \alpha + k_1 \\
+\end{pmatrix}
+$
+
+$\score= \frac{1}{(\alpha + k_1)^2-k_1^2} \begin{pmatrix}
+\alpha + k_1 & k_1 \\
+k_1 & \alpha + k_1 \\
+\end{pmatrix}\begin{pmatrix}
+l_1 k_1\\
+-l_1 k_1 \\
+\end{pmatrix} 
+= 
+\begin{pmatrix}
+l_1k_1 / (\alpha + 2k_1)\\
+-l_1k_1 / (\alpha + 2k_1)\\
+\end{pmatrix} 
+$
+\end{exemple}
 \subsubsection{Construction du réétalonnage et des scores normalisés}
 
 Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle. L'algorithme calcule un noyau d'utilisateur de référence puis calcule tous les réétalonnages de chaque utilisateur par rapport à ce noyau. Pour cette étape, l'algorithme utilise \gls{qrmed}

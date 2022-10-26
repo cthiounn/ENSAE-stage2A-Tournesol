@@ -16,9 +16,11 @@
 \usepackage{amsmath}
 
 \newtheorem{hypothesis}{Hypothèse}
-
+\newtheorem{exemple}{Exemple}[section]
 \newcommand{\score}{\theta^*}
+\newcommand{\deltascore}{\Delta\theta^*}
 \newcommand{\scoreh}{\theta^h}
+\newcommand{\deltascoreh}{\Delta\theta^h}
 \newcommand{\set}[1]{\left\lbrace #1 \right\rbrace}
 %\newcommand{\bm}[1]{{\color{blue}\textbf{BM}: #1}}
 \def\siecle#1{\textsc{\romannumeral #1}\textsuperscript{e}~siècle}
@@ -102,7 +104,12 @@
 \usepackage[scr=boondoxo]{mathalfa} % pour mathscr
 \usepackage{aligned-overset} % for alignment even with overset
 \usepackage{paracol}
+\usepackage[lined,boxed,commentsnumbered,ruled,vlined]{algorithm2e}
 
+\SetKwInput{KwRes}{R\'esultat}%
+\SetKwIF{Si}{SinonSi}{Sinon}{si}{alors}{sinon si}{sinon}{fin si}%
+\SetKwFor{Tq}{tant que}{faire}{fin tq}%
+\SetKwFor{PourCh}{pour chaque}{faire}{fin pour chaque}%
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% Images
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,18 +127,51 @@ Conrad Thiounn }
 \date{Septembre 12022}
 
 \begin{document}
+
+%\begin{titlingpage}
+%\maketitle
+%\begin{center}
+%Mémoire de stage de 2A
+%
+%ENSAE 12022: Stage d'application
+%
+%\vspace{5mm}
+%
+%Projet encadré par Lê-Nguyên Hoang (Association Tournesol)
+%\end{center}
+%\end{titlingpage}
+
 \begin{titlingpage}
-\maketitle
+\noindent
+\textbf{\Large{THIOUNN Conrad}} \hfill
+\textbf{\Large{ENSAE 2\textsuperscript{ème} année}} 
+\begin{flushright}
+\begin{minipage}{5.4cm}
 \begin{center}
-Mémoire de stage de 2A
-
-ENSAE 12022: Stage d'application
-
-\vspace{5mm}
-
-Projet encadré par Lê-Nguyên Hoang (Association Tournesol)
+\textbf{\emph{\large{Stage d'application \\
+Année scolaire 2021-2022 }}} 
 \end{center}
+\end{minipage}
+\end{flushright}
+
+\vspace{8cm}
+
+\hspace*{-\parindent}%
+\fbox{
+\begin{minipage}{17cm}
+\begin{center}
+\textbf{\huge{Evaluation et mise en place d'une heuristique en ligne sur l'algorithme de Tournesol}} \\
+\end{center}
+\end{minipage}
+}
+
+\vspace{8cm}
+
+\noindent \textbf{\Large{Association Tournesol \hfill Maître de stage : Lê-Nguyên HOANG \\ 
+\hspace{20mm} Lausanne-Paris}} \hfill \textbf{\large{1 juin 2022 - 30 septembre 2022}}
+
 \end{titlingpage}
+
 
 \pagenumbering{roman}
 
@@ -157,13 +197,12 @@ Projet encadré par Lê-Nguyên Hoang (Association Tournesol)
 \addcontentsline{toc}{section}{Notations mathématiques}
 \section*{Notations}
 
-% definition of shortcuts for the notations
-\newcommand{\si}{s_{\mathrm{image}}}
-\newcommand{\li}{l_{\mathrm{image}}}
-
 $$
 \begin{aligned}
 n & \text{: l'individu n} \\
+A & \text{: l'ensemble des entités notés} \\
+AB & \text{: l'ensemble des couples d'entités notés} \\
+N(A) & \text{: l'ensemble des autres entités liés à A par notation} \\
 \end{aligned}
 $$
 
