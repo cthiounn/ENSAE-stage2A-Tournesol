@@ -9,7 +9,7 @@ Les conditions du premier ordre de la maximisation de la vraisemblance \textit{a
  \forall a \in A,   (\alpha_{prior} + \sum_{ab \in AB} k_{ab}) \theta^{*}_a = \sum_{ab \in AB} k_{ab}(\theta^{*}_b + \ell(\Tilde{r_{ab}}))
 \end{equation}
 
-Au lieu de résoudre simultanément le système d'équations, où l'inversion matricielle est de l'ordre de $\mathcal{O}(n^3)$\footnote{Les meilleurs algorithmes sont de l'ordre de $\mathcal{O}(n^{2.373})$}, l'idée est d'appliquer une descente de coordonnées à partir du dernier état connu, idéalement à partir des coordonnées exactes données par l'algorithme Mehestan. 
+Au lieu de résoudre simultanément le système d'équations, où l'inversion matricielle est de l'ordre de $\mathcal{O}(n^3)$\footnote{~Les meilleurs algorithmes sont de l'ordre de $\mathcal{O}(n^{2.373})$}, l'idée est d'appliquer une descente de coordonnées à partir du dernier état connu, idéalement à partir des coordonnées exactes données par l'algorithme Mehestan. 
 
 Comme l'heuristique consiste à mettre à jour le score de a et b pour une comparaison entre ces deux dernières entités, les scores de a et b sont mis à jour à partir des scores précédents des entités connexes, en itérant $\tau$ fois en cercle concentrique dans le graphe de connexité.
 
@@ -103,10 +103,9 @@ En outre, la somme des écarts sous-estimés et la somme des écarts sur-estimé
 \subsubsection{Temps de rapidité de l'heuristique}
 
 Une heuristique doit être suffisamment rapide pour la plateforme Tournesol pour permettre d'être joué plusieurs fois par contributeur et en concurrence avec d'autres contributeurs.
+Dans la suite du rapport, l'indicateur \gls{tdr} mesurera le temps total en seconde de l'heuristique pour le calcul des scores ainsi que son intégration, comme la sauvegarde des scores.
 
-
-\subsection{Calcul théorique de l'heuristique proposée}
-%\subsubsection{Evaluation des bornes sur l'estimateur \gls{BSN}}
+\subsection{Calcul théorique de l'heuristique proposée}\label{sub:theorie}
 
 \subsubsection{Ajout d'un premier score}
 
@@ -479,7 +478,7 @@ Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{1-3})=(0, 
 \subsection{Evaluation pratique de la qualité de l'heuristique}
 \subsubsection{Evaluation par des tests déterministiques}
 
-Dans un premier temps, les tests Django mis en place adhoc permettent de tester des cas simples, mais non exhaustifs de l'ensemble de l'espace des possibilités. Ces premiers tests permettent d'avoir un premier aperçu du comportement de l'heuristique.
+Dans un premier temps, les tests Django\footnote{~Librairie Python pour répondre aux requêtes des utilisateurs, tout en effectuant des calculs en Python. Django permet de créer une API.} mis en place adhoc permettent de tester des cas simples, mais non exhaustifs de l'ensemble de l'espace des possibilités. Ces premiers tests permettent d'avoir un premier aperçu du comportement de l'heuristique.
 
 \begin{enumerate}
     \item Ex-nihilo : ajout d'une comparaison à 10
@@ -488,14 +487,17 @@ Dans un premier temps, les tests Django mis en place adhoc permettent de tester 
     \item Depuis la situation précédente : modifications séquentielles des comparaisons à -10
 \end{enumerate}
 
-
+Il n'est pas nécessaire de commenter les résultats des indicateurs obtenus par ces tests déterministes, outre le fait qu'ils indiquent des biais de somme nulle et des écarts à l'algorithme Mehestan, comme calculés dans la partie théorique (\ref{sub:theorie}). Dans la mesure où ces cas testés ne reflètent qu'une partie de l'espace, la valeur de ces indicateurs n'est pas significative. Dans le cadre des bonnes pratiques et de la qualité du développement, ces tests ont été conçus dans l'optique de tester l'intégration et le fonctionnement de l'heuristique.
 
 
 \subsubsection{Evaluation par des simulations de Monte-Carlo}
 
-Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministiques avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo (...)
+Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministiques avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo permettent une exploration plus fine de la distribution que peuvent prendre ces indicateurs, à l'aide d'une approche stochastique.
 
-Pour des raisons de temps, la démarche s'est focalisée sur l'ajout, mais pourrait s'appliquer pour de la modification et de la suppression, voire d'ajouter une loi sur l'action du contributeur (ajout, modification, suppression). 
+Il s'agit de supposer une loi \textit{a priori} sur les notations et de se fixer une situation initiale avec un nombre d'entité et un nombre de comparaisons à effectuer. Dans un premier temps, le prior suivra une loi uniforme. Puis dans un second temps, dans une démarche d'analyse de sensibilité, le prior suivra des lois discrètes à probabilité inégale, modélisant des hypothèses précises.
+
+Pour des raisons de temps, la démarche s'est focalisée sur l'ajout, mais pourrait s'appliquer pour de la modification et de la suppression, voire d'ajouter une loi sur l'action du contributeur (ajout, modification, suppression). Il était possible de supposer une loi \textit{a priori} sur
+la probabilité de tirage d'un couple, puis d'une action et enfin d'une notation, ou inversement d'une action, puis le tirage d'un couple et enfin une notation. Sous contrainte de temps, le rasoir d'Ockham amène à adopter des hypothèses simples.
 
 \paragraph{Profil uniforme}
 
@@ -503,7 +505,9 @@ Dans un premier temps, l'évaluation se fait avec un prior non informatif avec u
 
 \paragraph{Profil Gaussien}
 
-Dans un second temps, dans une démarche d'analyse de sensibilité, une loi gaussienne discrète centrée est considérée comme prior.
+Dans un second temps, dans une démarche d'analyse de sensibilité, le prior suit une loi gaussienne discrète centrée. Cela correspond à un profil de contributeur exprimant en grande partie soit une indifférence entre deux entités, soit une préférence faible.
+
+La loi est simulée à partir d'une loi uniforme et des probabilités $p_i$ souhaitées (...)
 
 \begin{figure}[ht]
   \includegraphics[width=\linewidth]{gauss.png}
@@ -514,7 +518,7 @@ Dans un second temps, dans une démarche d'analyse de sensibilité, une loi gaus
 
 
 \paragraph{Profil extrême}
-
+Enfin, le prior suit ici une loi avec deux modes en -10 et 10 et une probabilité faible en 0. Cette loi peut se voir aussi comme un mélange de deux gaussienne discrète centrée en 10 et -10 et tronqué au delà de ces valeurs. Cette loi correspond à un profil extrême, ayant des avis tranchés entre deux entités et n'exprimant quasi-jamais l'indifférence.
 
 \begin{figure}[ht]
   \includegraphics[width=\linewidth]{antigauss.png}

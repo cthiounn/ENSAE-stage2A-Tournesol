@@ -3,12 +3,12 @@
 \subsection{Présentation générale}
 
 La plateforme collaborative Tournesol, accessible en ligne avec un navigateur à l'adresse
-\href{https://tournesol.app}{tournesol.app}, est un espace coopératif où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Après inscription et une fois authentifié, la plateforme offre la possibilité de comparer deux entités, de gérer une liste d'entités à comparer, de visualiser ses comparaisons. Tout internaute peut visualiser les recommandations générales ou par critère de la plateforme, après calcul et classement par l'algorithme Mehestan.
+\href{https://tournesol.app}{tournesol.app}, est un espace coopératif où chacun peut contribuer en effectuant des comparaisons entre deux entités (vidéos, candidats). Après inscription et une fois authentifié, la plateforme offre la possibilité de comparer deux entités, de gérer une liste d'entités à comparer et de visualiser ses propres comparaisons effectuées. Tout internaute peut visualiser les recommandations générales ou par critère de la plateforme, après calcul et classement par l'algorithme Mehestan.
 
-Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparaison et la recommandation de vidéos hébergées sur Youtube, et est capable de proposer des comparaisons sur d'autres champs, tel que le choix d'un candidat comme pour l'élection présidentielle 2022, ou pour des revues par les pairs d'articles scientifiques.
+Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparaison et la recommandation de vidéos hébergées sur Youtube. La plateforme est conçue à être générique dans la recommandation d'entités et est donc capable de proposer des comparaisons sur d'autres champs, tel que le choix d'un candidat comme pour l'élection présidentielle 2022, ou pour des revues par les pairs d'articles scientifiques.
 
 
-À l'aide des contributions, l'algorithme Mehestan a pour objectif d'harmoniser toutes les notations deux à deux et de calculer un score global pour chaque entité de manière robuste. En effet, un contributeur ne devrait pas être un contributeur pivot\footnote{en microéconomie, un agent est dit pivot si sa présence ou son absence caractèrise le résultat de production d'un bien public.} d'un score d'une entité, afin d'éviter des stratégies sous-optimales et des attaques mal intentionnées de manipulation de l'information.
+À l'aide des contributions, l'algorithme Mehestan a pour objectif d'harmoniser toutes les notations deux à deux et de calculer un score global pour chaque entité de manière robuste. En effet, un contributeur ne devrait pas être un contributeur pivot\footnote{~En microéconomie, un agent est dit pivot si sa présence ou son absence caractèrise le résultat de production d'un bien public.} d'un score d'une entité afin d'éviter des stratégies sous-optimales et des attaques mal intentionnées de manipulation de l'information.
 
 \begin{figure}[ht]
   \includegraphics[width=\linewidth]{tournesol.png}
@@ -21,15 +21,15 @@ Aujourd'hui, la plateforme Tournesol est principalement centrée sur la comparai
 
 
 
-Les scores calculées permettent dans un premier temps de proposer une page de recommandation générale. L'utilisateur a la possibilité de filtrer par critères ou de donner des poids différents aux critères afin de construire sa propre page de recommandation. Dans un monde où la volumétrie de l'information est difficilement appréhendable pour le cerveau humain, les systèmes de recommandations actuels ne sont pas satisfaisants au regard de l'intérêt commun, car ces systèmes sont conçus pour répondre à l'intérêt privé des entreprises, \textit{i.e.} maximiser la captivité de l'attention des utilisateurs. 
+Les scores calculés permettent dans un premier temps de proposer une page de recommandation générale. L'utilisateur a la possibilité de filtrer par critères ou de donner des poids différents aux critères afin de construire sa propre page de recommandation. Dans un monde où la volumétrie de l'information est difficilement appréhendable pour le cerveau humain, les systèmes de recommandations actuels ne sont pas satisfaisants au regard de l'intérêt commun, car ces systèmes sont conçus pour répondre à l'intérêt privé des entreprises, \textit{i.e.} maximiser la captivité de l'attention des utilisateurs. 
 
 L'objectif premier de Tournesol est donc de proposer des informations recommandées pour le bien commun, que la plateforme met en avant. Loin de vouloir corriger tous les biais, la plateforme Tournesol introduit un biais particulier, le biais du jugement des contributeurs, afin de réinternaliser le coût social et de mieux répondre aux préférences des utilisateurs en termes d'accès à l'information. En ce sens, l'objectif de Tournesol n'est donc pas de proposer des recommandations de manière "neutre", mais avec une visée éthique.
 
-Les informations recommandées prennent tout d'abord la forme de recommandation globale. Le coeur de l'algorithme Mehestan est en premier lieu de proposer une quantification de la désirabilité globale des entités, par l'aggrégation robuste des préférences individuelles. L'algorithme permet alors d'avoir une relation d'ordre et de proposer cette hiérarchisation à l'ensemble des internautes \footnote{\href{https://tournesol.app/recommendations?date=Month&language=}{https://tournesol.app/recommendations?date=Month&language=}}.
+Les informations recommandées prennent tout d'abord la forme de recommandation globale. Le coeur de l'algorithme Mehestan est en premier lieu de proposer une quantification de la désirabilité globale des entités, par l'aggrégation robuste des préférences individuelles. L'algorithme permet alors d'avoir une relation d'ordre et de proposer cette hiérarchisation à l'ensemble des internautes \footnote{~\href{https://tournesol.app/recommendations?date=Month&language=}{https://tournesol.app/recommendations?date=Month&language=}}.
 
 De plus, l'internaute peut personnaliser ses recommandations en choississant des filtres et en sélectionnant des critères. Tournesol propose de constituer un indicateur composite personnalisé afin d'affiner ses recommandations et ainsi de proposer des entités proches de ses préférences individuelles. Ce système de recommandations favorise alors une découvrabilité personnalisée d'entités recommandables.
 
-Compte tenu de l'importance de la qualité de l'information, l'algorithme de Tournesol doit être robuste et sécurisé. En particulier, l'algorithme doit être robuste à la contamination de données, aux attaques coordonnées de manipulation de l'information ou attaques bizantines. De même, la plateforme doit être sécurisé et garantir l'intégrité du processus et des données soumises par les contributeur, ainsi que respecter l'éventuel anonymat choisi des préférences individuelles.
+Compte tenu de l'importance de la qualité de l'information, l'algorithme de Tournesol doit être robuste et sécurisé. En particulier, l'algorithme doit être robuste à la contamination de données, aux attaques coordonnées de manipulation de l'information ou attaques bizantines. De même, la plateforme doit être sécurisé et garantir l'intégrité du processus et des données soumises par les contributeurs, ainsi que respecter l'éventuel anonymat choisi des préférences individuelles.
 
 
 Au delà de proposer des recommandations, Tournesol a pour ambition de constituer une base de données éthique et collaborative de grande envergure, afin de devenir un standard de facto et de montrer qu'il est possible d'allier éthique et IA et de guider les entités privés à emboîter le pas. Pour cela, un des objectifs finaux de Tournesol est de promouvoir des données collaboratives éthiques en open data et spécifiquement à destination des chercheurs en science des données.
@@ -83,7 +83,7 @@ r_{ab}=r(\theta_{ab}^\dagger)+\zeta_{ab}
 \end{equation}
 
 
-avec $\zeta_{ab}$ un bruit gaussien centré d'écart type $(1+R_{max})\sigma_0$\footnote{Le choix est fait ici pour simplifier les calculs à défaut d'\textit{a priori}, il peut être affiné par la suite}.
+avec $\zeta_{ab}$ un bruit gaussien centré d'écart type $(1+R_{max})\sigma_0$\footnote{~Le choix est fait ici pour simplifier les calculs à défaut d'\textit{a priori}, il peut être affiné par la suite}.
 En appliquant $\ell$ à $\Tilde{r}(\theta_{ab}^\dagger)$, $\theta_{ab}^\dagger = \ell (\frac{( r_{ab}-\zeta_{ab})}{(1+R_{max})})$.
 Cette quantité s'approche avec un développement limité au premier ordre par $\ell(\Tilde{r_{ab}}) - \ell'(\Tilde{r_{ab}})\frac{\zeta_{ab}}{(1+R_{max})}$ avec $\ell'(\Tilde{r})=(1-\Tilde{r}^2)^{-3/2}$
 
@@ -140,7 +140,7 @@ La log-vraisemblance négative \textit{a posteriori} s'écrit avec une constante
 \end{equation}
 
 \begin{equation}
- -log \mathcal{L} = \frac{1}{2\sigma_0^2} \left( \sum_{ab \in AB} k_{ab}(\ell(\Tilde{r_{ab}})-\theta_{ab}^\dagger)^2 + \alpha_{prior}\sum_{a \in A}\theta^\dagger_a^2 \right) + K'     
+ -log \mathcal{L} = \frac{1}{2\sigma_0^2} \left( \sum_{ab \in AB} k_{ab}(\ell(\Tilde{r_{ab}})-\theta_{ab}^\dagger)^2 + \alpha_{prior}\sum_{a \in A}{\theta^\dagger_a}^2 \right) + K'     
 \end{equation}
 
 avec $k_{ab} = \frac{1}{\ell'(\Tilde{r_{ab}})^2}$,
@@ -155,10 +155,17 @@ L'équation (\ref{equation:cpo}) établit un système d'équations linéaires à
 et $L = Vect(\sum_{b \in N(A)} k_{ab}\ell(\Tilde{r_{ab}}))$.
 K est une matrice à diagonale dominante et strictement dominante pour tout $\alpha_{prior}$ strictement positif. En vertu du lemme d'Hadamard, K est inversible et assure l'unicité et l'existence de l'estimateur MAP, estimant le mode de la vraisemblance \textit{a posteriori}.
 
-La variance de cet estimateur est donnée par la formule suivante :
+La variance de cet estimateur se calcule à partir du score du posterior et est l'inverse de l'information de Fisher\footnote{~Sous hypothèse de régularité du modèle.}. Il se déduit de l'estimation de $\sigma^2_0$ en supposant un prior égal à 1.
 
 \begin{equation}
+Var(\score)= (\frac{\partial²{-log \mathcal{L}_{ab}}}{\partial{\theta^\dagger_a}^2})^{-1}=\frac{1}{\sigma_0^2}\left( \alpha_{prior} + \sum_{ab \in AB} k_{ab} \right)
 \end{equation}
+
+\begin{equation}
+\hat{\sigma_0}^2 =\frac{1}{card(AB)} \left( 1 + \sum_{ab \in AB} k_{ab,t}(l_{ab,t} - \score_{ab})^2 \right)
+\end{equation}
+
+Dans la suite de ce rapport, l'incertitude relative à un score réfère à l'écart-type plug-in de l'estimateur MAP.
 
 \subsection{Fonctionnement de l'algorithme Mehestan}
 
@@ -172,9 +179,7 @@ L'algorithme Mehestan fonctionne en trois phases :
 \end{enumerate}
 \subsubsection{Construction des scores individuels}
 
-Pour chaque contributeur, à partir de sa matrice de comparaison $r_t$, la première partie de l'algorithme calcule le vecteur des scores individuels bruts et des incertitudes à partir des formules énoncées précédemment
-
-\pagebreak
+Pour chaque contributeur, à partir de sa matrice de comparaison $r_t$, la première partie de l'algorithme calcule le vecteur des scores individuels bruts et des incertitudes à partir des formules énoncées précédemment.
 
 \begin{algorithm}
 \renewcommand{\algorithmcfname}{Algorithme}
@@ -258,11 +263,48 @@ $
 \end{exemple}
 \subsubsection{Construction du réétalonnage et des scores normalisés}
 
-Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle. L'algorithme calcule un noyau d'utilisateur de référence puis calcule tous les réétalonnages de chaque utilisateur par rapport à ce noyau. Pour cette étape, l'algorithme utilise \gls{qrmed}
+Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle. L'algorithme calcule un noyau d'utilisateur de référence puis calcule tous les réétalonnages de chaque utilisateur par rapport à ce noyau. Pour cette étape, l'algorithme utilise \gls{qrmed} pour calculer le facteur d'homothétie $\textit{s}_{nm}$ médian et le facteur de translation $\tau_{nm}$ médian à appliquer entre deux contributeurs \textit{n} et \textit{m}, puis utilise la \gls{brmean} pour en extraire des facteurs \textit{s} et $\tau$ moyens\footnote{~Cette partie de l'algorithme ici présentée a été fortement vulgarisée pour être facilement accessible. En réalité, l'algorithme est bien plus complexe que cela.}.
+
+\begin{equation}
+    \gls{qrmed}_W(w,x) = \operatorname*{argmin}_{z \in \mathbf{R}} \set{ Wz^2 + \sum_{i=1}^n w_i|x_i-z|}
+\end{equation}
+
+avec W le paramètre de résilience Byzantine.
+
+\begin{equation}
+    \gls{brmean}_W(w,x) = \frac{1}{\lVert w \rVert_1} \sum_{i=1}^n w_iCLIP(x_i,\gls{qrmed}_{4W}(w,x),
+    \frac{\lVert w \rVert_1}{4W})
+\end{equation}
+avec CLIP(x, centre, longueur) la fonction qui tronque x dans l'intervalle $[centre \pm longueur]$
+
+\begin{equation}
+    \textit{s}_{nm}= \gls{qrmed}_1(1,\set{ \frac{|\score_{an}-\score_{bn}|}{|\score_{am}-\score_{bm}|} : ab \in AB})
+\end{equation}
+\begin{equation}
+    \tau_{nm}= \gls{qrmed}_1(1,\set{ s_n\score_{an} - s_m\score_{am} : a \in A })
+\end{equation}
+
+\begin{equation}
+\textit{s}=1+\gls{brmean}_{8W\lVert \score \rVert_\infty}(\set{w_m : m \in Voisin(n)},\set{s_{nm}-1 : m \in Voisin(n)})
+\end{equation}
+avec $w_m$ le droit de vote de l'utilisateur \textit{m}
+\begin{equation}
+\tau=  \gls{brmean}_{8W}(\set{w_m : m \in Voisin(n)},\set{\tau_{nm} : m \in Voisin(n)})
+\end{equation}
+
+Grace à ces deux facteurs, les scores normalisés $\theta^\circledS$ sont calculés par transformation affine :
+\begin{equation}
+\theta^\circledS=\textit{s}\score + \tau
+\end{equation}
+
 
 \subsubsection{Construction des scores des entités}
 
-L'algorithme calcule les scores globaux en utilisant \gls{qrmed} sur les scores normalisés des contributeurs pour chaque entité.
+L'algorithme calcule les scores globaux $\theta^g$ en utilisant \gls{qrmed} sur les scores normalisés des contributeurs pour chaque entité et ramène tous les scores entre [-100,100] par une bijection avec l'arc-tangente.
+
+\begin{equation}
+    \forall a \in A , \theta^g_a=\gls{qrmed}_{2W}(w,\theta^\circledS_a)
+\end{equation}
 
 
 \pagebreak
