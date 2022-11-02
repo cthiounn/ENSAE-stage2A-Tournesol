@@ -14,6 +14,9 @@
 \usepackage{titling}
 \usepackage{titlesec}
 \usepackage{amsmath}
+\usepackage[most]{tcolorbox}
+\renewcommand{\appendixpagename}{Annexes}
+\renewcommand{\appendixtocname}{Annexes}
 
 \newtheorem{hypothesis}{Hypothèse}
 \newtheorem{exemple}{Exemple}[section]
@@ -45,7 +48,15 @@
   ]{biblatex}
   
 \addbibresource{biblio.bib} % import biblio file
+\defbibfilter{papers}{
+  type=article or
+  type=techreport
+}
 
+\defbibfilter{onlinepapers}{
+  type=online or
+  type=InCollection
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% Glossaire
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,20 +68,20 @@
 
 \newglossaryentry{fairness}
 {
-  name={fairness},
-  description={caractérisation de l'équité},
+  name={Fairness},
+  description={Caractérisation de l'équité},
 }
 
 \newglossaryentry{diffpriv}
 {
-  name={differential privacy},
+  name={Differential privacy},
   description={Confidentialité différentielle},
 }
 
 \newacronym{ia}{IA}{Intelligence Artificielle}
-\newacronym{gofai}{GOFAI}{Good Old Fashion Artificial Intelligence}
-\newacronym{ml}{ML}{Machine Learning}
-\newacronym{dl}{DL}{Deep Learning}
+\newacronym{gofai}{GOFAI}{Good Old Fashion Artificial Intelligence - Intelligence artificielle traditionnelle}
+\newacronym{ml}{ML}{Machine Learning - Méthodes d'apprentissage}
+\newacronym{dl}{DL}{Deep Learning - Méthodes d'apprentissage profond}
 \newacronym{qrmed}{QRMed}{Médiane à régularisation quadratique}
 \newacronym{brmean}{BRMean}{Moyenne Byzantine-robuste}
 \newacronym{bsn}{BSN}{Biais de somme nulle}
@@ -156,18 +167,25 @@ Année scolaire 2021-2022 }}}
 \end{minipage}
 \end{flushright}
 
-\vspace{8cm}
+\begin{flushright}
+\includegraphics[scale=0.3]{ensae.png}
+\end{flushright}
+\vspace{5.5cm}
 
 \hspace*{-\parindent}%
 \fbox{
 \begin{minipage}{17cm}
 \begin{center}
-\textbf{\huge{Evaluation et mise en place d'une heuristique en ligne sur l'algorithme de Tournesol}} \\
+\textbf{\huge{Mise en place et évaluation d'une heuristique en ligne sur l'algorithme de Tournesol}} \\
 \end{center}
 \end{minipage}
 }
 
-\vspace{8cm}
+\vspace{5.5cm}
+
+\noindent \includegraphics[scale=0.7]{logo_tournesol.png}
+
+\vspace{0.4cm}
 
 \noindent \textbf{\Large{Association Tournesol \hfill Maître de stage : Lê-Nguyên HOANG \\ 
 \hspace{20mm} Lausanne (Suisse)}} \hfill \textbf{\large{1 juin 2022 - 30 septembre 2022}}
@@ -186,6 +204,18 @@ Année scolaire 2021-2022 }}}
 \phantomsection % Mandatory line to avoid issues with the hyperlinks in the table of contents
 \addcontentsline{toc}{section}{Remerciements}
 \section*{Remerciements} 
+
+En premier lieu, j'aimerais remercier Oscar Villemaud, Lê-Nguyên Hoang, l'ENSAE Paris et l'association Tournesol de m'avoir donné l'opportunité de contribuer et d'améliorer la plateforme tournesol.app et de pouvoir contribuer à l'éthique de l'\gls{ia}.
+
+
+Ensuite, je souhaiterais également remercier l'équipe de Tournesol, en particulier Louis Faucon, Adrien Matissart, Aidan Jungo et Romain Beylerian, pour leur accueil, leurs conseils, leur bienveillance et d'avoir partagé leurs connaissances en matière d'éthique de l'\gls{ia}.
+
+
+En outre, je voudrais exprimer toute ma gratitude envers Ines Hiverlet et Fanny Salvan, futures administratrices de l'Insee, d'avoir consacré leur précieux temps pour une relecture attentive de mon rapport de stage et d'avoir proposer des améliorations. Leurs aides précieuses ont grandement façonné la forme et le fond de ce rapport.
+
+
+Enfin, j'aimerais remercier mes proches et ma famille, qui m'ont soutenu pendant le stage et la rédaction de ce présent rapport. Car il y a toujours une probabilité non nulle qu'un oubli survienne, par défaut de mémoire, je souhaiterais presque surement remercier toutes les personnes qui ont contribué directement ou indirectement à ce rapport et qui n'ont pas été citées précédemment.
+
 
 
 \pagebreak
@@ -224,24 +254,32 @@ $$
 
 
 
-
+\pagenumbering{Roman}
 
 \phantomsection
-\addcontentsline{toc}{section}{References}
+\addcontentsline{toc}{section}{Bibliographie}
 \section*{Bibliographie}
 
+\nocite{*}
 
 \printbibliography[
     heading = subbibintoc,
-    type=techreport,
-    title={Rapports institutionnels}]
+    filter=papers,
+    title={Rapports institutionnels et articles scientifiques}]
     
 \printbibliography[
     heading = subbibintoc,
-    type=online,
+    filter=onlinepapers,
     title={Ressources en ligne}]
+
+\printbibliography[
+    heading = subbibintoc,
+    type=book,
+    title={Livres}]
     
 \pagebreak
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -252,11 +290,12 @@ $$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\phantomsection
-\addcontentsline{toc}{section}{Annexes}
-\begin{appendix}
+
+\begin{appendices}
 \include{A_definition_AI}
 \include{B_definition_ethique}
-\end{appendix}
-
+\include{C_calculs_theoriques}
+\include{D_resultats_MC}
+\include{E_resultats_tir}
+\end{appendices}
 \end{document}

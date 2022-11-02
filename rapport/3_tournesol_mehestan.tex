@@ -25,7 +25,7 @@ Les scores calculés permettent dans un premier temps de proposer une page de re
 
 L'objectif premier de Tournesol est donc de proposer des informations recommandées pour le bien commun, que la plateforme met en avant. Loin de vouloir corriger tous les biais, la plateforme Tournesol introduit un biais particulier, le biais du jugement des contributeurs, afin de réinternaliser le coût social et de mieux répondre aux préférences des utilisateurs en termes d'accès à l'information. En ce sens, l'objectif de Tournesol n'est donc pas de proposer des recommandations de manière "neutre", mais avec une visée éthique.
 
-Les informations recommandées prennent tout d'abord la forme de recommandation globale. Le coeur de l'algorithme Mehestan est en premier lieu de proposer une quantification de la désirabilité globale des entités, par l'aggrégation robuste des préférences individuelles. L'algorithme permet alors d'avoir une relation d'ordre et de proposer cette hiérarchisation à l'ensemble des internautes \footnote{~\href{https://tournesol.app/recommendations?date=Month&language=}{https://tournesol.app/recommendations?date=Month&language=}}.
+Les informations recommandées prennent tout d'abord la forme de recommandation globale. Le coeur de l'algorithme Mehestan est en premier lieu de proposer une quantification de la désirabilité globale des entités, par l'aggrégation robuste des préférences individuelles. L'algorithme permet alors d'avoir une relation d'ordre et de proposer cette hiérarchisation à l'ensemble des internautes \footnote{~\href{https://tournesol.app/recommendations?date=Month\&language=}{https://tournesol.app/recommendations?date=Month\&language=}}.
 
 De plus, l'internaute peut personnaliser ses recommandations en choississant des filtres et en sélectionnant des critères. Tournesol propose de constituer un indicateur composite personnalisé afin d'affiner ses recommandations et ainsi de proposer des entités proches de ses préférences individuelles. Ce système de recommandations favorise alors une découvrabilité personnalisée d'entités recommandables.
 
@@ -57,24 +57,28 @@ La plateforme Tournesol collecte les préférences déclarées des contributeurs
 Les recommandations formulées par un contributeur sont à un bruit près les véritables préférences du contributeur.
 \end{hypothesis}
 \begin{hypothesis}\label{hyp2}
-Pour des raisons de parcimonie de calcul, le bruit est considéré gaussien et indépendant temporellement entre chaque comparaison d'un même contributeur. Cette hypothèse simplificatrice peut être remise en compte et améliorée. Dans une première version, Tournesol adopte cette hypothèse simplificatrice afin de pouvoir proposer un premier système de recommandation robuste.
+Pour des raisons de parcimonie de calcul, le bruit est considéré gaussien et indépendant temporellement entre chaque comparaison d'un même contributeur.
 \end{hypothesis}
 
 \begin{hypothesis}\label{hyp3}
 
-Les recommandations d'un contributeur sont supposées indépendantes. Soit $R_{ab}$ la variable aléatoire discrète dans $[\![-10,10]\!]$ représentant la note entre A et B, $(R_{ab})_{ab \in AB} \sim P_{\theta^\dagger_{ab}}$ avec AB l'ensemble des recommandations du contributeur, par le lemme des coalitions toute transformation de  $(R_{ab})_{ab \in AB}$ garde l'indépendance.
+Les recommandations d'un contributeur sont supposées indépendantes.
+
+Soit $R_{ab}$ la variable aléatoire discrète dans $[\![-10,10]\!]$ représentant la note entre A et B, 
+
+$(R_{ab})_{ab \in AB} \sim P_{\theta^\dagger_{ab}}$ avec AB l'ensemble des recommandations du contributeur, par le lemme des coalitions toute transformation de  $(R_{ab})_{ab \in AB}$ garde l'indépendance.
 
 \end{hypothesis}
 
 
 \subsubsection{Modélisation du problème inverse}
-Soient r (ou $r_{ab}$), la notation du contributeur n entre les entités a et b
+Soient r (ou $r_{ab}$), la notation du contributeur n entre les entités a et b,
 
-et $\Tilde{r}$, la notation normalisé entre (-1,1) avec $\Tilde{r} =r/(1+R_{max})$ et $R_{max}=10$
+et $\Tilde{r}$, la notation normalisé entre ]-1,1[ avec $\Tilde{r} =r/(1+R_{max})$ et $R_{max}=10$,
 
-et la fonction continue et dérivable $\ell : (-1,1) \rightarrow \mathbf{R}$ définie par $\ell : \Tilde{r} \rightarrow -\Tilde{r}/\sqrt{1-\Tilde{r}^2}$,
+et la fonction continue et dérivable $\ell : ]-1,1[ \rightarrow \mathbf{R}$ définie par $\ell : \Tilde{r} \rightarrow -\Tilde{r}/\sqrt{1-\Tilde{r}^2}$,
 
-alors, la fonction inverse est $\Tilde{r} : \mathbf{R} \rightarrow  (-1,1) ; \Tilde{r} : \ell \rightarrow -\ell / \sqrt{1+\ell²} $ avec $r(\ell)= \Tilde{r}(\ell)(1+R_{max})$
+alors, la fonction inverse est $\Tilde{r} : \mathbf{R} \rightarrow  ]-1,1[ ; \Tilde{r} : \ell \rightarrow -\ell / \sqrt{1+\ell²} $ avec $r(\ell)= \Tilde{r}(\ell)(1+R_{max})$
 
 Soit $\theta_{ab}^\dagger=\theta_a^\dagger-\theta_b^\dagger$, avec $\theta_a^\dagger, \theta_b^\dagger$ les vrais scores des entités a et b par le contributeur n, les hypothèses  \ref{hyp1} et \ref{hyp2} se traduisent par
 
@@ -83,27 +87,27 @@ r_{ab}=r(\theta_{ab}^\dagger)+\zeta_{ab}
 \end{equation}
 
 
-avec $\zeta_{ab}$ un bruit gaussien centré d'écart type $(1+R_{max})\sigma_0$\footnote{~Le choix est fait ici pour simplifier les calculs à défaut d'\textit{a priori}, il peut être affiné par la suite}.
+avec $\zeta_{ab}$ un bruit gaussien\footnote{~Le choix est fait ici pour simplifier les calculs à défaut d'\textit{a priori}, il peut être affiné par la suite} centré d'écart type $(1+R_{max})\sigma_0$.
 En appliquant $\ell$ à $\Tilde{r}(\theta_{ab}^\dagger)$, $\theta_{ab}^\dagger = \ell (\frac{( r_{ab}-\zeta_{ab})}{(1+R_{max})})$.
-Cette quantité s'approche avec un développement limité au premier ordre par $\ell(\Tilde{r_{ab}}) - \ell'(\Tilde{r_{ab}})\frac{\zeta_{ab}}{(1+R_{max})}$ avec $\ell'(\Tilde{r})=(1-\Tilde{r}^2)^{-3/2}$
+Cette quantité s'approche avec un développement limité au premier ordre par $\ell(\Tilde{r_{ab}}) - \ell'(\Tilde{r_{ab}})\frac{\zeta_{ab}}{(1+R_{max})}$ avec $\ell'(\Tilde{r})=(1-\Tilde{r}^2)^{-3/2}$,  \textit{i.e.} :
 
 \begin{equation}
     \theta_{ab}^\dagger \approx \ell(\Tilde{r_{ab}}) - \ell'(\Tilde{r_{ab}})\frac{\zeta_{ab}}{(1+R_{max})}
 \end{equation}
 
-$\zeta_{ab}$ est une variable aléatoire gaussienne centrée d'écart type $(1+R_{max})\sigma_0$  par hypothèse
+Pour rappel, $\zeta_{ab}$ est une variable aléatoire gaussienne centrée d'écart type $(1+R_{max})\sigma_0$  par hypothèse
 et $\theta_{ab}^\dagger$ et $r_{ab}$ sont des observations de variables aléatoires respectivement $\theta$ et R suivant des lois \textit{a priori} dans $\mathbf{R}$ et R à support discret.
 
 \subsubsection{Résolution du problème inverse}
 
-Les recommandations d'un contributeur donne des informations sur l'ensemble des $\set{\theta^\dagger_a : a \in A}$, avec A l'ensemble des entités notés.
+Les recommandations d'un contributeur donnent des informations sur l'ensemble des $\set{\theta^\dagger_a : a \in A}$, avec A l'ensemble des entités notées.
 En particulier, une recommandation entre a et b est à la fois une contribution pour $\theta^\dagger_a$ et à la fois pour $\theta^\dagger_b$.
 
-Dans cette partie, R est le vecteur aléatoire des observations empilés.
+Dans cette partie, R est le vecteur aléatoire des observations empilées.
 Soit $\theta$, le vecteur aléatoire des $\theta^\dagger$ empilés
 et soit $\pi(\theta)$ le prior de $\theta$ comme le produit de loi normale d'écart-type $\frac{\sigma_0}{\alpha_{prior}}$, avec $\alpha_{prior}$ un coefficient positif de pénalisation du \textit{prior}. Plus $\alpha_{prior}$ est petit, moins le prior n'a d'influence dans la modélisation.
 
-La formule de Bayes donne  
+D'après la formule de Bayes,
 \begin{equation}
 \pi(\theta|R) = \frac{f(R|\theta)\pi(\theta)}
 {\int_{\Theta} f(R|\theta)\pi(\theta) \,d\theta }
@@ -120,7 +124,8 @@ avec
 \begin{equation}
  f(R=r|\theta=\theta^\dagger)= \prod_{ab \in AB} \frac{1}{\sigma_0\ell'(\Tilde{r_{ab}})\sqrt{\tau}}\exp \left( -(\frac{\ell(\Tilde{r_{ab}})-\theta_{ab}^\dagger}{\sqrt{2}\sigma_0\ell'(\Tilde{r_{ab}})})^2 \right)    
 \end{equation}
-  avec  $\tau=2\pi$
+
+avec  $\tau=2\pi$
 
 \begin{equation}
  \pi(\theta)= \prod_{a \in A} \frac{1}{\sigma_0\sqrt{\tau}}\exp \left( -(\frac{\alpha_{prior}\theta^\dagger_a}{\sqrt{2}\sigma_0})^2 \right)    
@@ -148,7 +153,7 @@ avec $k_{ab} = \frac{1}{\ell'(\Tilde{r_{ab}})^2}$,
 L'estimateur du maximum \textit{a posteriori} se déduit des conditions du premier ordre de la log-vraisemblance négative \textit{a posteriori} car le problème est fortement convexe.
 
 \begin{equation}\label{equation:cpo}
-\forall a \in A, \sigma_0^2\frac{\partial{log\mathcal{L}}}{\partial{\theta_a^\dagger}} = 0 = \alpha_{prior}\theta^\dagger_a - \sum_{ab \in AB}k_{ab}(\ell(\Tilde{r_{ab}})-\theta_{a}^\dagger-\theta_{b}^\dagger)
+\forall a \in A, \sigma_0^2\frac{\partial{log\mathcal{L}}}{\partial{\score_a}} = 0 = \alpha_{prior}\score_a - \sum_{ab \in AB}k_{ab}(\ell(\Tilde{r_{ab}})-\score_a-\score_b)
 \end{equation}
 
 L'équation (\ref{equation:cpo}) établit un système d'équations linéaires à résoudre. Il peut s'écrire sous la forme matricielle $\theta^*=K^{-1}L$ avec K une matrice inversible et $\theta^*$ l'estimateur du maximum \textit{a posteriori} (MAP), avec $K = Mat(diag(\alpha_{prior}+\sum_{b \in N(A)} k_{ab}))   - Mat(k_{ab}) $
@@ -169,7 +174,7 @@ Dans la suite de ce rapport, l'incertitude relative à un score réfère à l'é
 
 \subsection{Fonctionnement de l'algorithme Mehestan}
 
-Cette sous-section présente de manière succinct l'algorithme Mehestan. La construction des scores individuels est le pivot de l'algorithme et l'heuristique souhaité vise à réduire sa complexité algorithmique. Mesurer la qualité de l'heuristique revient à mesurer les écarts entre l'algorithme Mehestan et les résultats de l'heuristique sur cette partie, car cette dernière se substitue à la première. Néanmoins, pour avoir une idée plus précise de l'impact sur les scores finaux de Tournesol, il est nécessaire d'en comprendre leur construction et notamment la volonté d'obtenir des scores robustes aux attaques d'utilisateur malveillant voulant manipuler ces scores.
+Cette sous-section présente de manière succincte l'algorithme Mehestan. La construction des scores individuels est le pivot de l'algorithme et l'heuristique souhaitée vise à réduire sa complexité algorithmique. Mesurer la qualité de l'heuristique revient à mesurer les écarts entre l'algorithme Mehestan et les résultats de l'heuristique sur cette partie, car cette dernière se substitue à la première. Néanmoins, pour avoir une idée plus précise de l'impact sur les scores finaux de Tournesol, il est nécessaire d'en comprendre leur construction et notamment la volonté d'obtenir des scores robustes aux attaques d'utilisateur malveillant voulant manipuler ces scores.
 L'algorithme Mehestan fonctionne en trois phases :
 
 \begin{enumerate}
@@ -210,44 +215,44 @@ $\deltascore \leftarrow \frac{1}{card(AB)} \left( 1 + \sum_{ab \in AB} k_{ab,t}(
 
 
 
-Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
+Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$, l'algorithme est le suivant :
 
-$r_{t}= \begin{pmatrix}
+\begin{align*}
+r_{t}= \begin{pmatrix}
 0 & n_{1-2} \\
 -n_{1-2} & 0 
-\end{pmatrix}$
-
-$l_{t}= \begin{pmatrix}
+\end{pmatrix}
+~~~~~~
+l_{t}= \begin{pmatrix}
 0 & l_1 \\
 -l_1 & 0 \\
 \end{pmatrix}
-$
-
-$k_{t}= \begin{pmatrix}
+~~~~~~
+k_{t}= \begin{pmatrix}
 0 & k_1 \\
 k_1 & 0 \\
-\end{pmatrix}
-$
+\end{pmatrix}    
+\end{align*}
 
-$K_{aa,t}= \begin{pmatrix}
+\begin{align*}
+K_{aa,t}= \begin{pmatrix}
 \alpha + k_1\\
 \alpha +  k_1\\
 \end{pmatrix} 
-$
-
-$L_{t}= \begin{pmatrix}
+~~~~~~
+L_{t}= \begin{pmatrix}
 l_1 k_1\\
 -l_1 k_1 \\
 \end{pmatrix} 
-$
-
-$K_{t}= \begin{pmatrix}
+~~~~~~
+K_{t}= \begin{pmatrix}
 \alpha + k_1 & -k_1 \\
 -k_1 & \alpha + k_1 \\
 \end{pmatrix}
-$
+\end{align*}
 
-$\score= \frac{1}{(\alpha + k_1)^2-k_1^2} \begin{pmatrix}
+\begin{align*}
+\score= \frac{1}{(\alpha + k_1)^2-k_1^2} \begin{pmatrix}
 \alpha + k_1 & k_1 \\
 k_1 & \alpha + k_1 \\
 \end{pmatrix}\begin{pmatrix}
@@ -259,23 +264,22 @@ l_1 k_1\\
 l_1k_1 / (\alpha + 2k_1)\\
 -l_1k_1 / (\alpha + 2k_1)\\
 \end{pmatrix} 
-$
+\end{align*}
 \end{exemple}
 \subsubsection{Construction du réétalonnage et des scores normalisés}
 
-Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle. L'algorithme calcule un noyau d'utilisateur de référence puis calcule tous les réétalonnages de chaque utilisateur par rapport à ce noyau. Pour cette étape, l'algorithme utilise \gls{qrmed} pour calculer le facteur d'homothétie $\textit{s}_{nm}$ médian et le facteur de translation $\tau_{nm}$ médian à appliquer entre deux contributeurs \textit{n} et \textit{m}, puis utilise la \gls{brmean} pour en extraire des facteurs \textit{s} et $\tau$ moyens\footnote{~Cette partie de l'algorithme ici présentée a été fortement vulgarisée pour être facilement accessible. En réalité, l'algorithme est bien plus complexe que cela.}.
+Avant d'agréger les scores individuels, il est nécessaire de réétalonner ces scores sur une même échelle. L'algorithme calcule un noyau d'utilisateurs de référence puis calcule tous les réétalonnages de chaque utilisateur par rapport à ce noyau. Pour cette étape, l'algorithme utilise \gls{qrmed} pour calculer le facteur d'homothétie $\textit{s}_{nm}$ médian et le facteur de translation $\tau_{nm}$ médian à appliquer entre deux contributeurs \textit{n} et \textit{m}, puis utilise la \gls{brmean} pour en extraire des facteurs \textit{s} et $\tau$ moyens\footnote{~Cette partie de l'algorithme ici présentée a été fortement vulgarisée pour être facilement accessible. En réalité, l'algorithme est bien plus complexe que cela.}.
 
 \begin{equation}
     \gls{qrmed}_W(w,x) = \operatorname*{argmin}_{z \in \mathbf{R}} \set{ Wz^2 + \sum_{i=1}^n w_i|x_i-z|}
 \end{equation}
-
 avec W le paramètre de résilience Byzantine.
 
 \begin{equation}
     \gls{brmean}_W(w,x) = \frac{1}{\lVert w \rVert_1} \sum_{i=1}^n w_iCLIP(x_i,\gls{qrmed}_{4W}(w,x),
     \frac{\lVert w \rVert_1}{4W})
 \end{equation}
-avec CLIP(x, centre, longueur) la fonction qui tronque x dans l'intervalle $[centre \pm longueur]$
+avec $CLIP(x, centre, longueur)$ la fonction tronquant $x$ dans l'intervalle $[centre \pm longueur]$
 
 \begin{equation}
     \textit{s}_{nm}= \gls{qrmed}_1(1,\set{ \frac{|\score_{an}-\score_{bn}|}{|\score_{am}-\score_{bm}|} : ab \in AB})
@@ -291,7 +295,6 @@ avec $w_m$ le droit de vote de l'utilisateur \textit{m}
 \begin{equation}
 \tau=  \gls{brmean}_{8W}(\set{w_m : m \in Voisin(n)},\set{\tau_{nm} : m \in Voisin(n)})
 \end{equation}
-
 Grace à ces deux facteurs, les scores normalisés $\theta^\circledS$ sont calculés par transformation affine :
 \begin{equation}
 \theta^\circledS=\textit{s}\score + \tau

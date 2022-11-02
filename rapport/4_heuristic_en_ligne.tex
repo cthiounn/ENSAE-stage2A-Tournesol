@@ -1,7 +1,7 @@
-\section{Heuristiques en ligne}
-Afin de permettre un calcul rapide, les heuristiques sont un compromis entre rapidité et fiabilité. En effet, une heuristique est une méthode de calcul rapide, sans toutefois être exact ou optimal. L'association Tournesol souhaite ici mettre en place une heuristique permettant, dès qu'une comparaison est opérée, le calcul et la mise à jour des scores concernés.
+\section{Heuristique en ligne}
+Afin de permettre un calcul rapide, les heuristiques sont un compromis entre rapidité et fiabilité. En effet, une heuristique est une méthode de calcul rapide, sans toutefois être exacte ou optimale. L'association Tournesol souhaite ici mettre en place une heuristique permettant, dès qu'une comparaison est opérée, le calcul et la mise à jour des scores concernés.
 
-\subsection{Première heuristique}
+\subsection{Calcul de l'heuristique}
 
 Les conditions du premier ordre de la maximisation de la vraisemblance \textit{a posteriori} (\ref{equation:cpo}) donnent en regroupant les termes en $\theta^{*}_a$ à gauche :
 
@@ -77,7 +77,7 @@ $ \deltascoreh \leftarrow \deltascoreh_\tau $
 
 Les comparaisons relatives constituent un système à somme nulle, puisque des quantités sont ajoutées et retirées de manière asymétrique. Les scores individuels bruts sont à somme nulle. En cas de somme non nulle, le biais signifie que des scores sont sous-estimés ou sur-estimés sans justification valable. Par conséquent, par exemple, si les scores d'une entité sont sous-estimés par plusieurs contributeurs, alors le score global de l'entité peut être lui aussi sous-estimé. Il convient alors de mesurer et de maîtriser cette déformation des poids dans un premier temps d'une manière grossière.
 
-Soit l'indicateur \gls{bsn},
+Soit l'indicateur \acrfull{bsn},
 
 \begin{equation}
 BSN= \sum_{a \in A} \theta^{heuristique}_{a}
@@ -88,7 +88,7 @@ BSN= \sum_{a \in A} \theta^{heuristique}_{a}
 
 Comme l'heuristique permet d'avoir des résultats approchés des scores calculés Mehestan, la somme des écarts absolus constitue une mesure de la convergence entre les deux algorithmes. Idéalement, cet indicateur devrait tendre vers zéro si possible. Dans le cas contraire, il est nécessaire de mesurer à quel point les résultats de l'heuristique s'écartent des scores réels et d'affiner l'heuristique pour diminuer l'écart.
 
-Soit l'indicateur \gls{eam},
+Soit l'indicateur \acrfull{eam},
 \begin{equation}
 EAM= \sum_{a \in A} \left| \theta^{heuristique}_{a}-\theta^{Mehestan}_{a} \right| 
 \end{equation}
@@ -98,12 +98,12 @@ EAM= \sum_{a \in A} \left| \theta^{heuristique}_{a}-\theta^{Mehestan}_{a} \right
 De plus, la somme des écarts absolus des incertitudes donne une idée de la déformation de l'intervalle de confiance.
 
 
-En outre, la somme des écarts sous-estimés et la somme des écarts sur-estimé constituent des mesures complémentaires riches en information.
+En outre, la somme des écarts sous-estimés et la somme des écarts sur-estimés constituent des mesures complémentaires riches en information.
 
 \subsubsection{Temps de rapidité de l'heuristique}
 
-Une heuristique doit être suffisamment rapide pour la plateforme Tournesol pour permettre d'être joué plusieurs fois par contributeur et en concurrence avec d'autres contributeurs.
-Dans la suite du rapport, l'indicateur \gls{tdr} mesurera le temps total en seconde de l'heuristique pour le calcul des scores ainsi que son intégration, comme la sauvegarde des scores.
+Une heuristique doit être suffisamment rapide pour la plateforme Tournesol pour permettre d'être jouée plusieurs fois par contributeur et en concurrence avec d'autres contributeurs.
+Dans la suite du rapport, l'indicateur \acrfull{tdr} mesurera le temps total en seconde de l'heuristique pour le calcul des scores ainsi que son intégration, comme la sauvegarde des scores.
 
 \subsection{Calcul théorique de l'heuristique proposée}\label{sub:theorie}
 
@@ -111,35 +111,33 @@ Dans la suite du rapport, l'indicateur \gls{tdr} mesurera le temps total en seco
 
 Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
 
-$r_{t+1}= \begin{pmatrix}
+\begin{align*}
+r_{t+1}= \begin{pmatrix}
 0 & n_{1-2} \\
 -n_{1-2} & 0 
-\end{pmatrix}$
-
-$l_{t+1}= \begin{pmatrix}
+\end{pmatrix}
+~~~~~~
+l_{t+1}= \begin{pmatrix}
 0 & l_1 \\
 -l_1 & 0 \\
 \end{pmatrix}
-$
-
-$k_{t+1}= \begin{pmatrix}
+~~~~~~
+k_{t+1}= \begin{pmatrix}
 0 & k_1 \\
 k_1 & 0 \\
 \end{pmatrix}
-$
-
-
-$L_{t+1}= \begin{pmatrix}
+\end{align*}
+\begin{align*}
+L_{t+1}= \begin{pmatrix}
 l_1 k_1\\
 -l_1 k_1 \\
 \end{pmatrix} \triangleq
 \begin{pmatrix}
 L1\\
 L2
-\end{pmatrix} 
-$
-
-$K_{aa,t+1}= \begin{pmatrix}
+\end{pmatrix}
+~~~~~~
+K_{aa,t+1}= \begin{pmatrix}
 \alpha + k_1\\
 \alpha +  k_1\\
 \end{pmatrix} \triangleq
@@ -147,18 +145,21 @@ $K_{aa,t+1}= \begin{pmatrix}
 K1\\
 K2
 \end{pmatrix} 
-$
+\end{align*}
 
 avec les scores bruts individuels calculés par l'algorithme Mehestan (cf Exemple \ref{example:n1})
 
-$\score_{t+1}= \begin{pmatrix}
+\begin{align*}
+\score_{t+1}= \begin{pmatrix}
 \score_{t+1,1} \\
 \score_{t+1,2} 
 \end{pmatrix}=
 \begin{pmatrix}
 l_1k_1 / (\alpha + 2k_1)\\
 -l_1k_1 / (\alpha + 2k_1)\\
-\end{pmatrix}$
+\end{pmatrix}    
+\end{align*}
+
 
 L'heuristique donne pour $\tau=0, A^{t+1,0}=\set{E_1,E_2}$
 
@@ -184,12 +185,19 @@ pour $\tau=1, A^{t+1,1}=\set{E_1,E_2}$
 \end{equation*}
 
 
-car  $(L_1+\score_{1} k_1) / K_1 = -(L_2+\score_{2} k_1) / K_2$
+car  
+\begin{equation*}
+(L_1+\score_{1} k_1) / K_1 = -(L_2+\score_{2} k_1) / K_2    
+\end{equation*}
 
-puis 
-$(L_1+\scoreh_{t+1,0,1} k_1) / K_1 = -(L_2+\scoreh_{t+1,0,2} k_1) / K_2 $
+puis
+\begin{align*}
+(L_1+\scoreh_{t+1,0,1} k_1) / K_1 = -(L_2+\scoreh_{t+1,0,2} k_1) / K_2    
+\end{align*}
+\begin{equation*}
+\gls{eam}=  |\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|     
+\end{equation*}
 
-$\gls{eam}=  |\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}| $
 \begin{equation*}
 \forall{n_{1-2}}\in [\![-10;10]\!], EAM \in [0,0.842]
 \end{equation*}
@@ -201,61 +209,64 @@ Le minimum et le maximum sont atteints respectivement en $n_{1-2}=0$ et en -8 ou
 \subsubsection{Ajout d'un score après calcul par Mehestan}
 
 
-Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2} \in [\![-10;10]\!]$
-
-
-$r_{t}= \begin{pmatrix}
+Soit un contributeur \textit{i} ayant fait une comparaison entre $E_{1}$ et $E_{2}$ avec une notation $n_{1-2}, \in [\![-10;10]\!]$
+\begin{align*}
+r_{t}= \begin{pmatrix}
 0 & n_{1-2} \\
 -n_{1-2} & 0 
-\end{pmatrix}$
+\end{pmatrix}    
+\end{align*}
 
-avec les scores bruts individuels calculés par l'algorithme Mehestan
+avec les scores bruts individuels calculés par l'algorithme Mehestan.
 
-$\score_{t}= \begin{pmatrix}
+\begin{align*}
+ \score_{t}= \begin{pmatrix}
 \score_{t,1} \\
 \score_{t,2} 
-\end{pmatrix}$
+\end{pmatrix}   
+\end{align*}
 
 Le contributeur effectue une nouvelle comparaison entre $E_{2}$ et $E_{3}$ avec une notation $n_{2-3} \in [\![-10;10]\!]$. Les scores sont cette fois-ci calculés par l'heuristique.
 
-$r_{t+1}= \begin{pmatrix}
+\begin{align*}
+r_{t+1}= \begin{pmatrix}
 0 & n_{1-2} & 0\\
 -n_{1-2} & 0 & n_{2-3}\\
 0 & -n_{2-3} & 0
-\end{pmatrix}$
-
-$l_{t+1}= \begin{pmatrix}
+\end{pmatrix}
+~~~~~~
+l_{t+1}= \begin{pmatrix}
 0 & l_1 & 0\\
 -l_1 & 0 & l_2\\
 0 & -l_2 & 0
 \end{pmatrix}
-$
-
-$k_{t+1}= \begin{pmatrix}
+~~~~~~
+k_{t+1}= \begin{pmatrix}
 0 & k_1 & 0\\
 k_1 & 0 & k_2\\
 0 & k_2 & 0
 \end{pmatrix}
-$
-
+\end{align*}
 avec 
-
-$l_1= -\tilde{r_1}/\sqrt{(1-\tilde{r_1}²)}$
-
-et $k_1= (1-\tilde{r_1}²)³ $
-
-et $\tilde{r_1} = n_{1-2}/(R_{max}+1)$
-
-et ici $R_{max}=10$
-
-$l_{t+1} \cdot k_{t+1}= \begin{pmatrix}
+\begin{align*}
+    \left\{
+                \begin{array}{ll}
+                  l_1= -\tilde{r_1}/\sqrt{(1-\tilde{r_1}²)} \\
+                    k_1= (1-\tilde{r_1}²)³  \\
+                    \tilde{r_1} = n_{1-2}/(R_{max}+1) \\
+                    R_{max}=10 \\
+                \end{array}
+              \right.
+\end{align*}
+\begin{align*}
+l_{t+1} \cdot k_{t+1}= \begin{pmatrix}
 0 & l_1 k_1 & 0\\
 -l_1 k_1 & 0 & l_2 k_2\\
 0 & -l_2 k_2 & 0
 \end{pmatrix}
-$
-
-$L_{t+1}= \begin{pmatrix}
+\end{align*}
+\begin{align*}
+L_{t+1}= \begin{pmatrix}
 l_1 k_1\\
 -l_1 k_1 +l_2 k_2\\
 -l_2 k_2
@@ -265,9 +276,8 @@ L1\\
 L2\\
 L3
 \end{pmatrix} 
-$
-
-$K_{aa,t+1}= \begin{pmatrix}
+~~~~~~
+K_{aa,t+1}= \begin{pmatrix}
 \alpha + k_1\\
 \alpha +  k_1 + k_2\\
 \alpha + k_2
@@ -277,213 +287,111 @@ K1\\
 K2\\
 K3
 \end{pmatrix} 
-$
+\end{align*}
+
 
 
 
 Pour $\tau=0, A^{t+1,0}=\set{E_2,E_3}$
 
-$ \scoreh_{t+1,0}= \begin{pmatrix}
+\begin{align*}
+    \scoreh_{t+1,0}= \begin{pmatrix}
 (L_2+\score_{1} k_1) / K_2 \\
 (L_3+\score_{2} k_2) / K_3
 \end{pmatrix}
+\end{align*}
 
-avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
+
+avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)$
 
 Pour $\tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}$
 
-$ \scoreh_{t+1,1}= \begin{pmatrix}
+\begin{align*}
+  \scoreh_{t+1,1}= \begin{pmatrix}
 (L_1+\scoreh_{t+1,0,2} k_1) / K_1 \\
 (L_2+\score_{1} k_1) / K_2 \\
 (L_3+\scoreh_{t+1,0,2} k_2) / K_3 
 \end{pmatrix}
-
-$BSN =
+\end{align*}
+\begin{align*}
+BSN =
 (L_1+\scoreh_{t+1,0,2} k_1) / K_1 +
 (L_2+\score_{1} k_1 + \scoreh_{t+1,0,2} k_2)  / K_2 +
 (L_3+\scoreh_{t+1,0,2} k_2) / K_3 
-$
+\end{align*}
 
 \begin{equation*}
     \forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]
 \end{equation*}
 
+\begin{figure}[ht]
+  \includegraphics[width=\linewidth]{heatmap.png}
+  \caption{Distribution des résultats de l'indicateur BSN (ordonnée,abscisse)}
+  % \vspace{-15pt}
+\end{figure}
 
 Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{2-3})=(-4, -9)$ et en (4, 9).
 
 
-scores de Mehestan
+Les scores de l'algorithme Mehestan sont données par les formules suivantes :
 
-$K_{t+1} \score_{t+1}= L_{t+1}$
-
-$\score_{t+1}=K^{-1}_{t+1} L$
+\begin{align*}
+    \left\{
+                \begin{array}{ll}
+                K_{t+1} \score_{t+1}= L_{t+1} \\
+                \score_{t+1}=K^{-1}_{t+1} L_{t+1}\\
+                \end{array}
+              \right.
+\end{align*}
 
 avec 
-$ K_{t+1}= \begin{pmatrix}
+
+\begin{align*}
+K_{t+1}= \begin{pmatrix}
 K_1&-k_{12}&-k_{13}\\
 -k_{12}&K_2&-k_{23}\\
 -k_{13}&-k_{23}&K_3
 \end{pmatrix}
+\end{align*}
 
 ici, $k_{12}=k1, k_{13}=0, k_{23}=k2$
+
 alors, 
 
-$ K_{t+1}= \begin{pmatrix}
+\begin{align*}
+K_{t+1}= \begin{pmatrix}
 K_1&-k_1&0\\
 -k_1&K_2&-k_2\\
 0&-k_2&K_3
-\end{pmatrix}
+\end{pmatrix}    
+\end{align*}
 
-$ K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2-k_2^2 & k_1 K_2 & k_1 k_2 \\ k_1 K_2 & K_2 K_3 & k_2 K_3 \\ k_1 k_2 & k_2 K_3 & K_1 K_3-k_1^2 \end{array} \right)/(-K_2 k_1^2-k_2^2 K_3+K_1 K_2 K_3)$
-
-
-EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|  $
+\begin{align*}
+K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2-k_2^2 & k_1 K_2 & k_1 k_2 \\ k_1 K_2 & K_2 K_3 & k_2 K_3 \\ k_1 k_2 & k_2 K_3 & K_1 K_3-k_1^2 \end{array} \right)/(-K_2 k_1^2-k_2^2 K_3+K_1 K_2 K_3)    
+\end{align*}
 
 \begin{equation*}
-\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²  EAM \in [ 0.000,1.640 ]
+EAM=  |\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|
+\end{equation*}
+
+\begin{equation*}
+\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]² ,  EAM \in [ 0.000,1.640 ]
 \end{equation*}
 
 
-Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{2-3})=(0, 0)$ et en (-9, -7).
+Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{2-3})=(0, 0)$ et en (-9, -7)\footnote{~L'autre cas est traité est en annexe \ref{appendice:calcul-theorique}}.
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% VARIANTE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-
-
-Variante : 
-Le contributeur effectue une nouvelle comparaison entre $E_{1}$ et $E_{3}$ avec une notation $n_{1-3} \in [\![-10;10]\!]$. Les scores sont cette fois-ci calculés par l'heuristique.
-
-$r_{t+1}= \begin{pmatrix}
-0 & n_{1-2} &  n_{1-3} \\
--n_{1-2} & 0 & 0\\
- -n_{1-3}  & 0 & 0
-\end{pmatrix}$
-
-$l_{t+1}= \begin{pmatrix}
-0 & l_1 & l_2\\
--l_1 & 0 & 0\\
--l_2 & 0 & 0
-\end{pmatrix}
-$
-
-$k_{t+1}= \begin{pmatrix}
-0 & k_1 &  k_2 \\
-k_1 & 0 & 0 \\
- k_2 & 0 & 0
-\end{pmatrix}
-$
-
-
-$l_{t+1} \cdot k_{t+1}= \begin{pmatrix}
-0 & l_1 k_1 & l_2 k_2\\
--l_1 k_1 & 0 & 0\\
--l_2 k_2 & 0 & 0
-\end{pmatrix}
-$
-
-$L_{t+1}= \begin{pmatrix}
-l_1 k_1 +l_2 k_2 \\
--l_1 k_1\\
--l_2 k_2
-\end{pmatrix} \triangleq
-\begin{pmatrix}
-L1\\
-L2\\
-L3
-\end{pmatrix} 
-$
-
-$K_{aa,t+1}= \begin{pmatrix}
-\alpha + k_1 + k_2\\
-\alpha +  k_1 \\
-\alpha + k_2
-\end{pmatrix} \triangleq
-\begin{pmatrix}
-K1\\
-K2\\
-K3
-\end{pmatrix} 
-$
-
-
-
-Pour $\tau=0, A^{t+1,0}=\set{E_1,E_3}$
-
-$ \scoreh_{t+1,0}= \begin{pmatrix}
-(L_1+\score_{2} k_1) / K_1 \\
-(L_3+\score_{1} k_2) / K_3
-\end{pmatrix}$
-
-avec $\score_{1} = - \score_{2} = l_1 k_1/(\alpha + 2 k_1)&
-
-Pour $\tau=1, A^{t+1,1}=\set{E_1,E_2,E_3}$
-
-$ \scoreh_{t+1,1}= \begin{pmatrix}
-(L_1+\score_{2} k_1 + \scoreh_{t+1,0,3} k_2) / K_1 \\
-(L_2+\scoreh_{t+1,0,1} k_1) / K_2 \\
-(L_3+\scoreh_{t+1,0,1} k_2) / K_3 
-\end{pmatrix}
-
-$BSN =
-(L_1+\score_{2} k_1 + \scoreh_{t+1,0,3} k_2) / K_1 +
-(L_2+\scoreh_{t+1,0,1} k_1) / K_2 +
-(L_3+\scoreh_{t+1,0,1} k_2) / K_3 
-$
-
-\begin{equation*}
-    \forall{n_{1-2},n_{1-3}}\in [\![-10;10]\!]² , BSN \in [-1.10,1.10]
-\end{equation*}
-
-
-Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{1-3})=(4, -9)$ et en (-4, 9).
-
-
-scores de Mehestan
-
-$K_{t+1} \score_{t+1}= L_{t+1}$
-
-$$\score_{t+1}=K^{-1}_{t+1} L$
-
-avec 
-$ K_{t+1}= \begin{pmatrix}
-K_1&-k_{12}&-k_{13}\\
--k_{12}&K_2&-k_{23}\\
--k_{13}&-k_{23}&K_3
-\end{pmatrix}
-
-ici, $k_{12}=k_1, k_{13}=k_2, k_{23}=0$
-alors, 
-
-$ K_{t+1}= \begin{pmatrix}
-K_1&-k_1&-k_2\\
--k_1&K_2&0\\
--k_2&0&K_3
-\end{pmatrix}
-
-$ K^{-1}_{t+1}= \left( \begin{array}{ccc} K_1 K_2 & k_1 K_2 & k_2 K_1 \\ k_1 K_2 & K_2 K_3-k_2^2 & k_1 k_2 \\ k_2 K_1 & k_1 k_2 & K_1 K_3-k_1^2 \end{array} \right)/(-K_2 k_1^2-k_2^2 K_1+K_1 K_2 K_3)$
-
-EAM=  $|\score_{t+1,1} - \scoreh_{t+1,1,1}|   +  |\score_{t+1,2} - \scoreh_{t+1,1,2}|  +  |\score_{t+1,3} - \scoreh_{t+1,1,3}|  $
-
-\begin{equation*}
-\forall{n_{1-2},n_{2-3}}\in [\![-10;10]\!]²,  EAM \in [0.000,1.640 ]
-\end{equation*}
-
-
-Le minimum et le maximum sont atteints respectivement en $(n_{1-2},n_{1-3})=(0, 0)$ et en (-9, 7).
+En somme, l'heuristique produit des écarts théoriques avec l'algorithme Mehestan et introduit un biais de somme nulle dans certains cas, pour un faible nombre de comparaisons. Les simulations de Monte-Carlo vont permettre de pouvoir évaluer de manière pratique la qualité de l'heuristique avec un grand nombre de comparaisons.
 
 \subsection{Evaluation pratique de la qualité de l'heuristique}
-\subsubsection{Evaluation par des tests déterministiques}
+\subsubsection{Evaluation par des tests déterministes}
 
 Dans un premier temps, les tests Django\footnote{~Librairie Python pour répondre aux requêtes des utilisateurs, tout en effectuant des calculs en Python. Django permet de créer une API.} mis en place adhoc permettent de tester des cas simples, mais non exhaustifs de l'ensemble de l'espace des possibilités. Ces premiers tests permettent d'avoir un premier aperçu du comportement de l'heuristique.
 
 \begin{enumerate}
     \item Ex-nihilo : ajout d'une comparaison à 10
     \item Depuis une comparaison : ajout d'une nouvelle comparaison 10, modification de la comparaison à 0, suppression de la comparaison
-    \item Ex-nihilo : ajout séquentielle de toutes les comparaisons sur 10 entités à 10
+    \item Ex-nihilo : ajout séquentiel de toutes les comparaisons sur 10 entités à 10
     \item Depuis la situation précédente : modifications séquentielles des comparaisons à -10
 \end{enumerate}
 
@@ -492,25 +400,66 @@ Il n'est pas nécessaire de commenter les résultats des indicateurs obtenus par
 
 \subsubsection{Evaluation par des simulations de Monte-Carlo}
 
-Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministiques avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo permettent une exploration plus fine de la distribution que peuvent prendre ces indicateurs, à l'aide d'une approche stochastique.
+Afin d'avoir une meilleure idée de la qualité de l'heuristique, plutôt que de mettre en place tous les tests déterministes avec des valeurs fixes de notation et de choix d'entités, les simulations de Monte-Carlo permettent une exploration plus fine de la distribution que peuvent prendre ces indicateurs, à l'aide d'une approche stochastique.
 
-Il s'agit de supposer une loi \textit{a priori} sur les notations et de se fixer une situation initiale avec un nombre d'entité et un nombre de comparaisons à effectuer. Dans un premier temps, le prior suivra une loi uniforme. Puis dans un second temps, dans une démarche d'analyse de sensibilité, le prior suivra des lois discrètes à probabilité inégale, modélisant des hypothèses précises.
+Il s'agit de supposer une loi \textit{a priori} sur les notations et de se fixer une situation initiale avec un nombre d'entités et un nombre de comparaisons à effectuer. Dans un premier temps, le \textit{prior} suivra une loi uniforme. Puis dans un second temps, dans une démarche d'analyse de sensibilité, le \textit{prior} suivra des lois discrètes à probabilité inégale, modélisant des hypothèses précises. Les paires d'entités à comparer sont tirées à l'aide d'une loi uniforme, sans remise.
 
-Pour des raisons de temps, la démarche s'est focalisée sur l'ajout, mais pourrait s'appliquer pour de la modification et de la suppression, voire d'ajouter une loi sur l'action du contributeur (ajout, modification, suppression). Il était possible de supposer une loi \textit{a priori} sur
+Pour des raisons de temps, la démarche s'est focalisée sur l'ajout, mais pourrait s'appliquer pour de la modification et de la suppression d'une comparaison, voire d'ajouter une loi sur l'action du contributeur (ajout, modification, suppression). Il était possible de supposer une loi \textit{a priori} sur
 la probabilité de tirage d'un couple, puis d'une action et enfin d'une notation, ou inversement d'une action, puis le tirage d'un couple et enfin une notation. Sous contrainte de temps, le rasoir d'Ockham amène à adopter des hypothèses simples.
+
+Les cas de tests sont les suivants :
+
+\begin{center}
+\begin{tabular}{ |c|c| } 
+
+\hline
+nombre d'ajouts & nombre d'entités total  \\
+\hline
+5 &  10   \\
+5 &  20   \\
+5 &  100   \\
+10 &  12   \\
+10 &  13   \\
+10 &  100   \\
+100 &  20   \\
+100 &  1000   \\
+\hline
+\end{tabular}
+\end{center}
 
 \paragraph{Profil uniforme}
 
-Dans un premier temps, l'évaluation se fait avec un prior non informatif avec une loi uniforme sur $[\![-10,10]\!]$.
+Dans un premier temps, l'évaluation se fait avec un \textit{prior} non informatif avec une loi uniforme sur $[\![-10,10]\!]$. L'utilisation d'un \textit{prior} non informatif est justifiée si soit aucune expertise adhoc n'est disponible pour la distribution concernée soit aucune hypothèse n'est faite sur cette dernière. En l'occurrence, aucune expertise n'est ici disponible et aucune hypothèse n'est faite concernant des probabilités discrètes inégales.
 
 \paragraph{Profil Gaussien}
 
-Dans un second temps, dans une démarche d'analyse de sensibilité, le prior suit une loi gaussienne discrète centrée. Cela correspond à un profil de contributeur exprimant en grande partie soit une indifférence entre deux entités, soit une préférence faible.
+Dans un second temps, dans une démarche d'analyse de sensibilité, le \textit{prior} suit une loi gaussienne discrète centrée. Cela correspond à un profil de contributeur exprimant en grande partie soit une indifférence entre deux entités, soit une préférence faible.
 
-La loi est simulée à partir d'une loi uniforme et des probabilités $p_i$ souhaitées (...)
+La loi est simulée à partir d'une loi uniforme et des probabilités $p_i$ souhaitées :
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c|c| } 
+\hline
+$i$ & -10 & -9 & -8 & -7 & -6 & -5 & -4  \\
+\hline
+$p_i$ & 0.00053861 & 0.00153299 & 0.00390822 & 0.00892463 & 0.01825486 & 0.03344625 & 0.05489084  \\ 
+\hline
 
-\begin{figure}[ht]
-  \includegraphics[width=\linewidth]{gauss.png}
+$i$ & -3 & -2 & -1 & 0 & 1 & 2 & 3 \\
+\hline
+$p_i$ &  0.08069342 & 0.1062586 & 0.12533694 & 0.13242928 & 0.12533694 & 0.1062586 & 0.08069342  \\
+\hline
+$i$ & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+$p_i$ & 0.05489084 & 0.03344625 & 0.01825486 & 0.00892463 & 0.00390822 & 0.00153299 & 0.00053861\\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=1.2]{gauss.png}
   \caption{Profil d'une notation centrée autour de 0, distribution sur 10000 tirages}
   % \vspace{-15pt}
 \end{figure}
@@ -518,23 +467,46 @@ La loi est simulée à partir d'une loi uniforme et des probabilités $p_i$ souh
 
 
 \paragraph{Profil extrême}
-Enfin, le prior suit ici une loi avec deux modes en -10 et 10 et une probabilité faible en 0. Cette loi peut se voir aussi comme un mélange de deux gaussienne discrète centrée en 10 et -10 et tronqué au delà de ces valeurs. Cette loi correspond à un profil extrême, ayant des avis tranchés entre deux entités et n'exprimant quasi-jamais l'indifférence.
+Enfin, le \textit{prior} suit ici une loi avec deux modes en -10 et 10 et une probabilité faible en 0. Cette loi peut se voir aussi comme un mélange de deux gaussiennes discrètes centrées en 10 et -10 et tronqué au delà de ces valeurs. Cette loi correspond à un profil extrême, ayant des avis tranchés entre deux entités et n'exprimant quasi-jamais l'indifférence.
 
-\begin{figure}[ht]
-  \includegraphics[width=\linewidth]{antigauss.png}
+La loi est simulée à partir d'une loi uniforme et des probabilités $p_i$ souhaitées :
+\begin{center}
+\begin{tabular}{ |c|c|c|c|c|c|c|c| } 
+\hline
+$i$ & -10 & -9 & -8 & -7 & -6 & -5 & -4  \\
+\hline
+$p_i$ & 0.13242928 & 0.12533694 & 0.1062586 & 0.08069342 & 0.05489084 & 0.03344625 & 0.01825486  \\ 
+\hline
+
+$i$ & -3 & -2 & -1 & 0 & 1 & 2 & 3 \\
+\hline
+$p_i$ &  0.00892463 & 0.00390822 & 0.00153299 & 0.00053861 & 0.00153299 & 0.00390822 & 0.00892463  \\
+\hline
+$i$ & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+$p_i$ & 0.01825486 & 0.03344625 & 0.05489084 & 0.08069342 & 0.1062586 & 0.12533694 & 0.13242928\\
+\hline
+\end{tabular}
+\end{center}
+ 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=1.2]{antigauss.png}
   \caption{Profil d'une notation polarisante, distribution sur 10000 tirages}
   % \vspace{-15pt}
 \end{figure}
 
 \paragraph{D'autres profils possibles}
 
-trimodal
+Il est possible de générer un \textit{prior} trimodale, avec trois modes en -10, 0 et 10 correspondant à un profil à la fois indifférent et extrême. De même, un \textit{prior} bimodale en -5 et 5 aurait traduit un profil ayant toujours un avis prononcé mais toutefois tempéré. Néanmoins, ces profils n'ont pas été modélisés au profit de l'étude des trois premières.
 
 \paragraph{Résultats}
 
-Pour les trois profils, les simulations donnent un indicateur \gls{bsn} suivant un loi gaussienne centrée, pour 10 et 100 ajouts de nouvelles comparaisons.
-Concernant le \gls{EAM}, pour les trois profils, les simulations montrent que l'écart entre l'heuristique et l'algorithme Mehestan est important pour l'ajout de 10 nouvelles comparaisons. Toutefois, cet écart s'amenuise pour 100 nouvelles comparaisons.
+Pour les trois profils, les simulations donnent un indicateur \gls{bsn} suivant une loi gaussienne centrée, pour 10 et 100 ajouts de nouvelles comparaisons.
+Concernant l'\gls{eam}, pour les trois profils, les simulations montrent que l'écart entre l'heuristique et l'algorithme Mehestan est important pour l'ajout de 10 nouvelles comparaisons. Toutefois, cet écart s'amenuise pour 100 nouvelles comparaisons.
 
+
+\pagebreak
 
 \subsubsection{Evaluation sur données réelles}
 
@@ -545,20 +517,26 @@ Pour évaluer l'heuristique sur les données publiques de Tournesol, à volumét
 
 \begin{enumerate}
     \item Chargement de la base de données publiques
-    \item Modifications préalable
+    \item Modifications préalables
     \item Tirage de l'échantillon
     \item Tirs sur l'application
 \end{enumerate}
-L'évaluation de l'heuristique a été réalisé en environnement de developpement en local pour éviter les effets de réseau avec une volumétrie réelle, soit 3x xxx comparaisons.
-Dans un premier temps, il est nécessaire de réinitialiser la base de données de développement, puis de charger les données publiques par Django à l'aide de la fonctionnalité dédiée.
+L'évaluation de l'heuristique a été réalisée en environnement de developpement en local pour éviter les effets de réseau avec une volumétrie réelle, soit 39700 comparaisons.
+Dans un premier temps, il est nécessaire de réinitialiser la base de données de développement\footnote{~L'ensemble des scripts de cette sous-section sont disponibles à cette adresse $\href{https://github.com/cthiounn/ENSAE-stage2A-Tournesol/tree/main/public_database_simulation}{https://github.com/cthiounn/ENSAE-stage2A-Tournesol}$}, puis de charger les données publiques par Django à l'aide de la fonctionnalité dédiée.
 
-Dans un second temps, afin de faciliter l'automatisation, les noms d'utilisateurs des contributeurs ont été renommés de user1 à usern et leur mot de passe réinitialisé à "tournesolpassword". De manière similaire, les entités sont renommés de yt:00000000001 à yt:000000nnnnn. Les contributeurs ayant plus de 1000 comparaisons ont été promus "supertrusted", attribut non public servant de base de sondage pour la mise en place du réétalonnage.
+Dans un second temps, afin de faciliter l'automatisation, les noms d'utilisateurs des contributeurs ont été renommés de user1 à usern et leur mot de passe réinitialisé à "tournesolpassword". De manière similaire, les entités sont renommées de yt:00000000001 à yt:000000nnnnn. Les contributeurs ayant plus de 1000 comparaisons ont été promus "supertrusted", attribut non public servant de base de sondage pour la mise en place du réétalonnage.
 
-Ensuite, parmi tous les couples (utilisateur, entité, notation), un échantillon de xx xxx n-uplets a été tiré en suivant une loi uniforme.
+Ensuite, parmi tous les couples (utilisateur, entité, notation), un échantillon de 10000 n-uplets a été tiré en suivant une loi uniforme.
 
-Enfin, à partir de l'échantillon tiré, le logiciel xh effectue chaque comparaison, de manière automatisée, à la place du conttributeur.
+Enfin, à partir de l'échantillon tiré, le logiciel xh effectue chaque comparaison, de manière automatisée, à la place du contributeur.
 
 
 \paragraph{Résultats}
+
+Les tirs permettent de mesurer sur volumétrie réelle, le \gls{tdr} de l'heuristique. Cette dernière se déroule en moyenne en une demi-seconde, bien au delà de la milliseconde. Le temps total se décompose par étape de l'heuristique, calcul des scores individuels, application du réétalonnage, calcul des scores globaux et sauvegarde des scores. Ces étapes se déroulent respectivement en 4, 250, 4 et 100 ms
+
+
+Concernant le \gls{bsn} et l'\gls{eam}, le biais de somme nulle est en grande partie nul. L'écart absolu avec Mehestan sur les scores finaux est la suivante. Il faudra affiner l'heuristique et examiner les cas extrêmes de la distribution.
+
 
 \pagebreak

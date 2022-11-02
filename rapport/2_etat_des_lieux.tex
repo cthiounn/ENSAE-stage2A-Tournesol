@@ -12,7 +12,7 @@ Née dans la première moitié du \siecle{20}, avec l'essor de la cybernétique,
 
 Plus récemment, avec les progrès de l'informatique, de la collecte et du stockage des données, et des avancées scientifiques dans le domaine de la statistique, le grand public a uniquement connaissance des intelligences artificielles les plus médiatisées, comme AlphaGo et DeepBlue. Beaucoup d'\glspl{ia} sont complètement inconnues, prenant des décisions mondialement importantes, telles qu'Aladdin de Blackrock pour la gestion automatisée d'actifs financiers à grande échelle, ou des décisions à haut risque telles que Kargu-2 l'\gls{ia} des drones autonomes tueurs. Le changement d'échelle entre le premier algorithme informatique et ces dernières \glspl{ia} amène naturellement à se poser la question de l'éthique des algorithmes et des \gls{ia}, discutée dans la sous-section suivante \ref{subsection:ethique}.
 
-Tout d'abord, le terme "intelligence" dérive du latin \textit{intelligencia}, référant à la compréhension et à la connaissance. L'intelligence réfère en général à l'intelligence humaine, i.e. cognitive, comme la capacité à formuler des pensées pour raisonner, anticiper ou s'adapter, faire, se souvenir ou créer.
+Tout d'abord, le terme "intelligence" dérive du latin \textit{intelligencia}, référant à la compréhension et à la connaissance. L'intelligence réfère en général à l'intelligence humaine, \textit{i.e.} cognitive, comme la capacité à formuler des pensées pour raisonner, anticiper ou s'adapter, faire, se souvenir ou créer.
 Enfin, le terme "artificielle" est dérivé du latin \textit{artificialis}. Ce terme est composé du terme art du latin \textit{ars}, désignant l'ensemble des connaissances et des techniques pour atteindre un objectif, et du terme latin \textit{facio}, traduisant l'action de faire. À la fois le terme renvoie à la façon de faire dans l'état de l'art dans le sens premier et à la fois plus tardivement à la façon de contrefaire la nature.
 
 En somme, l'\gls{ia} est l'ensemble des méthodes et des connaissances pour effectuer, à l'aide d'entités artificielles, des activités humaines simples ou complexes, impliquant une activité cognitive pouvant aller de la perception d'informations jusqu'à la prise de décision par un raisonnement éclairé. En ce sens, un algorithme prend en entrée des informations, procède à l'ensemble de ses instructions, souvent transposées d'activités cognitives humaines comme le raisonnement déterministe ou bayésien et rend compte d'un ou plusieurs résultats.
@@ -43,7 +43,7 @@ En somme, pour Aristote, la morale est avant tout composée de principes moraux 
 \paragraph{Spinoza ou l'éthique de la connaisance, de la raison et des passions joyeuses}
 
 
-Pour Spinoza, dans son ouvrage \citetitle{spinoza1894ethic}, la vertu, comme recherche des passions joyeuses et la mise à l'écart des passions tristes, est l'essence même de l'homme. L'homme libre est celui qui est capable de raison et d'user de ses connaissances sur les désirs et affects qui ont emprise sur ce dernier. Il s'agit alors de limiter l'emprise des passions tristes qui diminuent l'essence de l'être et de rechercher les passions joyeuses qui augmentent le conatus,\textit{i.e} la volonté et le désir d'exister\footnote{~"
+Pour Spinoza, dans son ouvrage \citetitle{spinoza1894ethic}, la vertu, comme recherche des passions joyeuses et la mise à l'écart des passions tristes, est l'essence même de l'homme. L'homme libre est celui qui est capable de raison et d'user de ses connaissances sur les désirs et affects qui ont emprise sur ce dernier. Il s'agit alors de limiter l'emprise des passions tristes qui diminuent l'essence de l'être et de rechercher les passions joyeuses qui augmentent le conatus, \textit{i.e.} la volonté et le désir d'exister\footnote{~"
 Plus chacun s'efforce et plus il est capable de chercher ce qui lui est utile, c'est-à-dire de conserver son être, plus il a de vertu ; au contraire, en tant qu'il néglige de conserver ce qui lui est utile, c'est-à-dire son être, il marque son impuissance.
 "
 
@@ -99,7 +99,14 @@ Pour les biais de représentativité, les algorithmes équitables\footnote{~Il n
 
 Pour la confidentialité des données, les algorithmes à confidentialité différentielle (\gls{diffpriv} en anglais)\footnote{~Un algorithme est dit $ (\epsilon,\delta)$-différentiellement confidentiel s'il répond R pour des données X et Y différent d'une entrée avec $P[R|X]<=e^\epsilon P[R|Y] + \delta$}  sont un compromis satisfaisant entre confidentialité des données privées et diffusion controlée de résultats.
 
-Dans ce rapport, une \gls{ia} sera dite éthique si elle utilise des données éthiques à la fois pour les données d'apprentissage et les données réelles, des algorithmes auditables et produisant des résultats sécurisés sans biais. Compte tenu de cette définition forte, peu nombreuses sont les \gls{ia} répondant à cette définition, hormis les \gls{ia} trivialement simples.
+Dans ce rapport, une \gls{ia} sera dite éthique si elle répond à trois critères : 
+\begin{enumerate}
+    \item elle utilise des données éthiques à la fois pour les données d'apprentissage et les données réelles,
+    \item elle est composée d'algorithmes auditables,
+    \item elle produit des résultats sécurisés sans biais.
+\end{enumerate}
+
+Compte tenu de cette définition forte, peu nombreuses sont les \gls{ia} répondant à cette définition, hormis les \gls{ia} trivialement simples.
 
 De manière pratique, une \gls{ia} sera ici dite déontologique si elle a été conçue conformément à un code de déontologie. Cette définition permet d'inclure les \gls{ia} des organismes privés ou publics faisant un effort déontologique et d'encourager à produire des \gls{ia} encore plus éthique pour le bien commun.
 
